@@ -1,0 +1,11 @@
+<svg width="900" height="520" viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="520" rx="32" fill="#0A0E14"/>
+  <text x="60" y="80" fill="#E0E0E0" font-size="28" font-family="Inter, Arial" font-weight="700">Focus</text>
+  <text x="60" y="130" fill="#9AA4AF" font-size="18" font-family="Inter, Arial">Finaliser le design</text>
+  <circle cx="450" cy="300" r="150" stroke="#00F0FF" stroke-width="12"/>
+  <text x="395" y="315" fill="#00F0FF" font-size="42" font-family="Inter, Arial" font-weight="700">24:08</text>
+  <rect x="180" y="430" width="240" height="48" rx="16" fill="#131A24" stroke="#1E2A38"/>
+  <rect x="480" y="430" width="240" height="48" rx="16" fill="#8A2BE2"/>
+  <text x="270" y="461" fill="#E0E0E0" font-size="18" font-family="Inter, Arial">Pause</text>
+  <text x="560" y="461" fill="#FFFFFF" font-size="18" font-family="Inter, Arial">Terminer</text>
+</svg>
