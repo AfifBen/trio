@@ -43,7 +43,9 @@ class GoalCard extends StatelessWidget {
                   value: progress,
                   backgroundColor: const Color(0xFF0A0E14),
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    goal.completed ? const Color(0xFFFFD700) : const Color(0xFF00F0FF),
+                    goal.completed
+                        ? const Color(0xFFFFD700)
+                        : const Color(0xFF00F0FF),
                   ),
                 ),
               ),
@@ -58,7 +60,9 @@ class GoalCard extends StatelessWidget {
                   Text(
                     goal.completed ? 'Terminé' : 'En cours',
                     style: TextStyle(
-                      color: goal.completed ? const Color(0xFFFFD700) : const Color(0xFF8A2BE2),
+                      color: goal.completed
+                          ? const Color(0xFFFFD700)
+                          : const Color(0xFF8A2BE2),
                       fontWeight: FontWeight.w600,
                     ),
                   ),

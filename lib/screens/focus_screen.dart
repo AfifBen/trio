@@ -1,11 +1,70 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/goal.dart';
 import 'reward_screen.dart';
 
-class FocusScreen extends StatelessWidget {
+class FocusScreen extends StatefulWidget {
   final Goal goal;
 
   const FocusScreen({super.key, required this.goal});
+
+  @override
+  State<FocusScreen> createState() => _FocusScreenState();
+}
+
+class _FocusScreenState extends State<FocusScreen> {
+  static const int _defaultMinutes = 25;
+  late Duration _remaining;
+  Timer? _timer;
+  bool _isRunning = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _remaining = const Duration(minutes: _defaultMinutes);
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!_isRunning) return;
+      if (_remaining.inSeconds <= 1) {
+        timer.cancel();
+        _finishSession();
+      } else {
+        setState(() {
+          _remaining = _remaining - const Duration(seconds: 1);
+        });
+      }
+    });
+  }
+
+  void _togglePause() {
+    setState(() {
+      _isRunning = !_isRunning;
+    });
+  }
+
+  void _finishSession() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => RewardScreen(goal: widget.goal),
+      ),
+    );
+  }
+
+  String _format(Duration duration) {
+    final minutes = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +81,7 @@ class FocusScreen extends StatelessWidget {
           children: [
             const SizedBox(height: 24),
             Text(
-              goal.title,
+              widget.goal.title,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 20,
@@ -46,9 +105,9 @@ class FocusScreen extends StatelessWidget {
                 ],
               ),
               alignment: Alignment.center,
-              child: const Text(
-                '25:00',
-                style: TextStyle(
+              child: Text(
+                _format(_remaining),
+                style: const TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF00F0FF),
@@ -56,16 +115,16 @@ class FocusScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Mode Zen · Respire et avance',
-              style: TextStyle(color: Color(0xFF9AA4AF)),
+            Text(
+              _isRunning ? 'Mode Zen · Respire et avance' : 'Pause · Reviens quand tu es prêt',
+              style: const TextStyle(color: Color(0xFF9AA4AF)),
             ),
             const Spacer(),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: _togglePause,
                     style: OutlinedButton.styleFrom(
                       foregroundColor: const Color(0xFFE0E0E0),
                       side: const BorderSide(color: Color(0xFF1E2A38)),
@@ -74,19 +133,13 @@ class FocusScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text('Pause'),
+                    child: Text(_isRunning ? 'Pause' : 'Reprendre'),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => RewardScreen(goal: goal),
-                        ),
-                      );
-                    },
+                    onPressed: _finishSession,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF8A2BE2),
                       foregroundColor: Colors.white,
