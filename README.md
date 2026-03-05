@@ -1,10 +1,24 @@
 # TRIO
 
-**TRIO** is a minimalist productivity app built around the **Rule of 3**: pick **three key objectives** each day, focus on one at a time, and finish with a rewarding reflection loop.
+<p align="center">
+  <img src="assets/branding/trio-banner.svg" alt="TRIO banner" width="100%" />
+</p>
+
+<p align="center">
+  <img src="assets/branding/trio-logo.svg" alt="TRIO logo" width="120" />
+</p>
 
 <p align="center">
   <strong>3 Goals • 1 Focus • Daily Momentum</strong>
 </p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/flutter-3.41-blue?logo=flutter" />
+  <img src="https://img.shields.io/badge/license-MIT-green" />
+  <img src="https://img.shields.io/badge/status-MVP-brightgreen" />
+</p>
+
+**TRIO** is a minimalist productivity app built around the **Rule of 3**: pick **three key objectives** each day, focus on one at a time, and finish with a rewarding reflection loop.
 
 ---
 

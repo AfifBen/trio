@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TRIO — Rule of 3 Productivity</title>
+  <style>
+    :root {
+      --bg: #0A0E14;
+      --card: #131A24;
+      --accent: #00F0FF;
+      --violet: #8A2BE2;
+      --gold: #FFD700;
+      --text: #E0E0E0;
+      --muted: #9AA4AF;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .hero {
+      padding: 80px 10vw 60px;
+      background: radial-gradient(circle at 80% 20%, #131A24 0, #0A0E14 55%);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(0, 240, 255, 0.12);
+      color: var(--accent);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+    h1 { font-size: 56px; margin: 0 0 12px; }
+    p { color: var(--muted); font-size: 18px; line-height: 1.6; }
+    .cta {
+      margin-top: 28px;
+      display: inline-block;
+      padding: 14px 26px;
+      border-radius: 14px;
+      background: var(--accent);
+      color: #0A0E14;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      padding: 0 10vw 80px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid #1E2A38;
+      padding: 20px;
+      border-radius: 18px;
+    }
+    .card h3 { margin: 0 0 8px; }
+    .footer { padding: 30px 10vw 60px; color: var(--muted); }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div>
+      <div class="badge">TRIO — Rule of 3 Productivity</div>
+      <h1>3 Goals. 1 Focus. Daily Momentum.</h1>
+      <p>TRIO helps you lock your day into three meaningful wins. Start a focus session, finish with a reward, and build streaks that actually stick.</p>
+      <a class="cta" href="https://github.com/AfifBen/trio">View on GitHub</a>
+    </div>
+    <div>
+      <img src="../assets/branding/trio-banner.svg" alt="TRIO banner" style="width:100%; border-radius:18px; border:1px solid #1E2A38; background:#0A0E14;" />
+    </div>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <h3>Daily Goals</h3>
+      <p>Define your 3 wins and stay focused on what matters.</p>
+    </div>
+    <div class="card">
+      <h3>Focus Sessions</h3>
+      <p>25-minute deep work loops with a calming UI.</p>
+    </div>
+    <div class="card">
+      <h3>Reward Loop</h3>
+      <p>Celebrate each win with confetti, XP, and reflection.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Built with Flutter. Designed for clarity, momentum, and impact.
+  </footer>
+</body>
+</html>
