@@ -53,11 +53,50 @@ class TrioState extends ChangeNotifier {
 
   // Statistiques calculées
   int get totalMinutes => _sessions.fold(0, (sum, s) => sum + s.durationMinutes);
-  int get sessionsToday => _sessions.where((s) => 
-    s.timestamp.year == DateTime.now().year &&
-    s.timestamp.month == DateTime.now().month &&
-    s.timestamp.day == DateTime.now().day
-  ).length;
+
+  int get sessionsToday => _sessions.where((s) => _isSameDay(s.timestamp, DateTime.now())).length;
+
+  int get streakDays {
+    if (_sessions.isEmpty) return 0;
+    final sessionDays = _sessions
+        .map((s) => _dayOnly(s.timestamp))
+        .toSet()
+        .toList()
+      ..sort((a, b) => b.compareTo(a));
+
+    int streak = 0;
+    DateTime cursor = _dayOnly(DateTime.now());
+    for (final day in sessionDays) {
+      if (day == cursor) {
+        streak += 1;
+        cursor = cursor.subtract(const Duration(days: 1));
+      } else if (day.isAfter(cursor)) {
+        continue;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  List<int> last7DaysSessions() {
+    final today = _dayOnly(DateTime.now());
+    final counts = List<int>.filled(7, 0);
+
+    for (final session in _sessions) {
+      final day = _dayOnly(session.timestamp);
+      final diff = today.difference(day).inDays;
+      if (diff >= 0 && diff < 7) {
+        counts[6 - diff] += 1; // oldest -> newest
+      }
+    }
+    return counts;
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
+
+  DateTime _dayOnly(DateTime dt) => DateTime(dt.year, dt.month, dt.day);
 
   Future<void> load() async {
     if (_loaded) return;

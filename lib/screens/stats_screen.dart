@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../models/trio_state.dart';
 
 class StatsScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class StatsScreen extends StatelessWidget {
     return Consumer<TrioState>(
       builder: (context, state, _) {
         final sessions = state.sessions.reversed.toList();
+        final weekly = state.last7DaysSessions();
 
         return Scaffold(
           backgroundColor: const Color(0xFF0A0E14),
@@ -39,11 +41,25 @@ class StatsScreen extends StatelessWidget {
                         Icons.bolt,
                         const Color(0xFF8A2BE2),
                       ),
+                      const SizedBox(width: 12),
+                      _buildStatCard(
+                        'Streak',
+                        '${state.streakDays}j',
+                        Icons.local_fire_department,
+                        const Color(0xFFFFD700),
+                      ),
                     ],
                   ),
                 ),
               ),
-              
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: _WeeklyChart(weekly: weekly),
+                ),
+              ),
+
               const SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -157,6 +173,83 @@ class StatsScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _WeeklyChart extends StatelessWidget {
+  final List<int> weekly;
+
+  const _WeeklyChart({required this.weekly});
+
+  @override
+  Widget build(BuildContext context) {
+    final maxVal = weekly.isEmpty ? 1 : weekly.reduce((a, b) => a > b ? a : b);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF131A24),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFF1E2A38)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Activité 7 derniers jours',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFE0E0E0),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 160,
+            child: BarChart(
+              BarChartData(
+                gridData: FlGridData(show: false),
+                borderData: FlBorderData(show: false),
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        const labels = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Text(
+                            labels[value.toInt() % 7],
+                            style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 12),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                barGroups: List.generate(7, (index) {
+                  return BarChartGroupData(
+                    x: index,
+                    barRods: [
+                      BarChartRodData(
+                        toY: weekly[index].toDouble(),
+                        width: 12,
+                        color: const Color(0xFF00F0FF),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ],
+                  );
+                }),
+                maxY: (maxVal + 1).toDouble(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
