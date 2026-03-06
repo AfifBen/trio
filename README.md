@@ -50,6 +50,12 @@ Every day, you define **three wins**. Each focus session (25 minutes by default)
 2. **Focus** → 25 min timer, zero distraction
 3. **Reward** → XP + reflection + insight
 
+<p align="center">
+  <img src="docs/images/screenshot-dashboard.jpg" width="30%" />
+  <img src="docs/images/screenshot-focus.jpg" width="30%" />
+  <img src="docs/images/screenshot-reward.jpg" width="30%" />
+</p>
+
 ---
 
 ## 🧭 Roadmap
