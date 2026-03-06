@@ -4,6 +4,7 @@ import '../models/trio_state.dart';
 import '../models/goal.dart';
 import '../widgets/goal_card.dart';
 import 'focus_screen.dart';
+import 'stats_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -33,8 +34,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             title: const Text('TRIO — Tes 3 Victoires'),
             actions: [
               IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const StatsScreen()),
+                  );
+                },
+                icon: const Icon(Icons.bar_chart, color: Color(0xFF00F0FF)),
+              ),
+              IconButton(
                 onPressed: () => _showGoalDialog(context),
-                icon: const Icon(Icons.edit),
+                icon: const Icon(Icons.edit, color: Color(0xFF9AA4AF)),
               ),
             ],
           ),
@@ -59,6 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             return GoalCard(
                               goal: goal,
                               onTap: () => _openFocus(context, goal),
+                              onLongPress: () => _showSingleGoalEditDialog(context, goal),
                             );
                           },
                         ),
@@ -157,7 +167,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
     );
   }
+
+  Future<void> _showSingleGoalEditDialog(BuildContext context, Goal goal) async {
+    final controller = TextEditingController(text: goal.title);
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF131A24),
+          title: const Text('Modifier cet objectif'),
+          content: TextField(
+            controller: controller,
+            style: const TextStyle(color: Color(0xFFE0E0E0)),
+            decoration: InputDecoration(
+              hintText: 'Nouvel objectif',
+              hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Annuler'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<TrioState>().resetGoal(goal.id);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Supprimer', style: TextStyle(color: Color(0xFFFF6B6B))),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final newTitle = controller.text.trim();
+                if (newTitle.isNotEmpty) {
+                  context.read<TrioState>().updateGoalTitle(goal.id, newTitle);
+                  Navigator.of(context).pop();
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF00F0FF),
+                foregroundColor: const Color(0xFF0A0E14),
+              ),
+              child: const Text('Sauvegarder'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+
 
 class _EmptyGoals extends StatelessWidget {
   final VoidCallback onStart;

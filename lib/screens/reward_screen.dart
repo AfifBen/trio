@@ -25,9 +25,6 @@ class _RewardScreenState extends State<RewardScreen> {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 2));
     _confettiController.play();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TrioState>().incrementSession(widget.goal.id);
-    });
   }
 
   @override
@@ -201,7 +198,11 @@ class _RewardScreenState extends State<RewardScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        await context
+                            .read<TrioState>()
+                            .addSession(widget.goal.id, _transcript);
+                        if (!mounted) return;
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       },
                       style: ElevatedButton.styleFrom(

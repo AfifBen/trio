@@ -4,8 +4,9 @@ import '../models/goal.dart';
 class GoalCard extends StatelessWidget {
   final Goal goal;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
-  const GoalCard({super.key, required this.goal, this.onTap});
+  const GoalCard({super.key, required this.goal, this.onTap, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class GoalCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
       borderRadius: BorderRadius.circular(16),
       child: Ink(
         decoration: BoxDecoration(
