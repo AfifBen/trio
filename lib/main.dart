@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/trio_state.dart';
-import 'screens/dashboard_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() {
   runApp(const TrioApp());
@@ -28,7 +28,7 @@ class TrioApp extends StatelessWidget {
             bodyMedium: TextStyle(color: Color(0xFFE0E0E0)),
           ),
         ),
-        home: const DashboardScreen(),
+        home: const HomeScreen(),
       ),
     );
   }

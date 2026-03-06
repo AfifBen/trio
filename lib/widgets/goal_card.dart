@@ -5,8 +5,9 @@ class GoalCard extends StatelessWidget {
   final Goal goal;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final VoidCallback? onDelete;
 
-  const GoalCard({super.key, required this.goal, this.onTap, this.onLongPress});
+  const GoalCard({super.key, required this.goal, this.onTap, this.onLongPress, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +30,24 @@ class GoalCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                goal.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFFE0E0E0),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      goal.title.isEmpty ? 'Objectif vide' : goal.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFFE0E0E0),
+                      ),
+                    ),
+                  ),
+                  if (onDelete != null)
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline, color: Color(0xFFFF6B6B)),
+                      onPressed: onDelete,
+                    ),
+                ],
               ),
               const SizedBox(height: 12),
               ClipRRect(

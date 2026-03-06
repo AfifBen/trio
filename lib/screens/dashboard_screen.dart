@@ -7,7 +7,9 @@ import 'focus_screen.dart';
 import 'stats_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final bool autoOpenDialog;
+
+  const DashboardScreen({super.key, this.autoOpenDialog = false});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -17,7 +19,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => context.read<TrioState>().load());
+    Future.microtask(() async {
+      await context.read<TrioState>().load();
+      if (widget.autoOpenDialog) {
+        if (!mounted) return;
+        _showGoalDialog(context);
+      }
+    });
   }
 
   @override
@@ -69,6 +77,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               goal: goal,
                               onTap: () => _openFocus(context, goal),
                               onLongPress: () => _showSingleGoalEditDialog(context, goal),
+                              onDelete: () => _confirmDeleteGoal(context, goal),
                             );
                           },
                         ),
@@ -200,8 +209,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             TextButton(
               onPressed: () {
-                context.read<TrioState>().resetGoal(goal.id);
                 Navigator.of(context).pop();
+                _confirmDeleteGoal(context, goal);
               },
               child: const Text('Supprimer', style: TextStyle(color: Color(0xFFFF6B6B))),
             ),
@@ -222,6 +231,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         );
       },
+    );
+  }
+
+  Future<void> _confirmDeleteGoal(BuildContext context, Goal goal) async {
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF131A24),
+        title: const Text('Supprimer cet objectif ?'),
+        content: const Text(
+          'Cette action efface l\'objectif et remet son compteur à zéro.',
+          style: TextStyle(color: Color(0xFF9AA4AF)),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              context.read<TrioState>().resetGoal(goal.id);
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFF6B6B),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Supprimer'),
+          ),
+        ],
+      ),
     );
   }
 }
