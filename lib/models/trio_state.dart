@@ -94,8 +94,8 @@ class TrioState extends ChangeNotifier {
   int goalsTotalByType(String type) =>
       _goals.where((g) => g.categoryType == type).length;
 
-  int goalsTotal => _goals.length;
-  int goalsCompleted => _goals.where((g) => g.completed).length;
+  int get goalsTotal => _goals.length;
+  int get goalsCompleted => _goals.where((g) => g.completed).length;
 
   int get streakDays {
     if (_sessions.isEmpty) return 0;
