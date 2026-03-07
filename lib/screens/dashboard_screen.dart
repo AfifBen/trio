@@ -385,24 +385,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                final titles = titleControllers.map((c) => c.text.trim()).toList();
-                final totals = totalControllers
-                    .map((c) => int.tryParse(c.text.trim()) ?? 4)
-                    .toList();
-                final categoryItems = categoryControllers.map((c) => c.text.trim()).toList();
+                final rows = List.generate(3, (index) {
+                  return {
+                    'title': titleControllers[index].text.trim(),
+                    'total': int.tryParse(totalControllers[index].text.trim()) ?? 4,
+                    'categoryType': categories[index],
+                    'categoryItem': categoryControllers[index].text.trim(),
+                  };
+                }).where((row) => (row['title'] as String).isNotEmpty).toList();
 
-                if (titles.any((t) => t.isEmpty) || categoryItems.any((c) => c.isEmpty)) {
+                if (rows.isEmpty) return;
+                if (rows.any((row) => (row['categoryItem'] as String).isEmpty)) {
                   return;
                 }
 
-                final goals = List.generate(3, (index) {
+                final goals = List.generate(rows.length, (index) {
+                  final row = rows[index];
                   return Goal(
                     id: 'goal_${index + 1}',
-                    title: titles[index],
-                    categoryType: categories[index],
-                    categoryItem: categoryItems[index],
+                    title: row['title'] as String,
+                    categoryType: row['categoryType'] as String,
+                    categoryItem: row['categoryItem'] as String,
                     sessionsDone: 0,
-                    sessionsTotal: totals[index],
+                    sessionsTotal: row['total'] as int,
                   );
                 });
 
