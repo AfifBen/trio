@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/goal.dart';
 import '../services/notification_service.dart';
 import 'reward_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:trio/l10n/app_localizations.dart';
 
 class FocusScreen extends StatefulWidget {
   final Goal goal;

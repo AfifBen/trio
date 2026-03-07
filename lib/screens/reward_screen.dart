@@ -2,7 +2,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:trio/l10n/app_localizations.dart';
 import '../models/goal.dart';
 import '../models/trio_state.dart';
 

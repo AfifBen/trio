@@ -4,7 +4,7 @@ import 'models/trio_state.dart';
 import 'screens/home_screen.dart';
 import 'services/notification_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:trio/l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

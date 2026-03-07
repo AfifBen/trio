@@ -5,7 +5,7 @@ import '../models/goal.dart';
 import '../widgets/goal_card.dart';
 import 'focus_screen.dart';
 import 'stats_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:trio/l10n/app_localizations.dart';
 
 class DashboardScreen extends StatefulWidget {
   final bool autoOpenDialog;
