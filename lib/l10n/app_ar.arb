@@ -56,6 +56,14 @@
   "trackTypeReading": "قراءة",
   "trackTypeSoft": "مهارة ناعمة",
   "trackTypeHard": "مهارة تقنية",
-  "trackTotalHint": "أيام"
+  "trackTotalHint": "أيام",
+  "homeStreak": "سلسلة",
+  "habitsTitle": "عادات",
+  "projectsTitle": "مشاريع",
+  "addHabit": "أضف عادة",
+  "addProject": "أضف مشروعًا",
+  "emptyHabits": "لا توجد عادات بعد",
+  "emptyProjects": "لا توجد مشاريع بعد"
 }
+
 

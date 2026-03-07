@@ -189,4 +189,25 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get trackTotalHint => 'Jours';
+
+  @override
+  String get homeStreak => 'Série';
+
+  @override
+  String get habitsTitle => 'Habitudes';
+
+  @override
+  String get projectsTitle => 'Projets';
+
+  @override
+  String get addHabit => 'Ajouter une habitude';
+
+  @override
+  String get addProject => 'Ajouter un projet';
+
+  @override
+  String get emptyHabits => 'Aucune habitude';
+
+  @override
+  String get emptyProjects => 'Aucun projet';
 }

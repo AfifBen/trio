@@ -43,6 +43,8 @@ class TrioState extends ChangeNotifier {
   static const _goalsKey = 'trio_goals';
   static const _sessionsKey = 'trio_sessions';
   static const _trackKey = 'trio_track';
+  static const _habitsKey = 'trio_habits';
+  static const _projectsKey = 'trio_projects';
 
   List<Goal> _goals = [];
   List<FocusSession> _sessions = [];
@@ -53,6 +55,9 @@ class TrioState extends ChangeNotifier {
   int _trackDay = 1;
   int _trackTotal = 14;
 
+  List<String> _habits = [];
+  List<String> _projects = [];
+
   List<Goal> get goals => _goals;
   List<FocusSession> get sessions => _sessions;
   bool get loaded => _loaded;
@@ -62,6 +67,9 @@ class TrioState extends ChangeNotifier {
   int get trackDay => _trackDay;
   int get trackTotal => _trackTotal;
   bool get hasTrack => _trackName != null && _trackType != null;
+
+  List<String> get habits => _habits;
+  List<String> get projects => _projects;
 
   // Statistiques calculées
   int get totalMinutes => _sessions.fold(0, (sum, s) => sum + s.durationMinutes);
@@ -138,6 +146,18 @@ class TrioState extends ChangeNotifier {
       _trackTotal = decoded['total'] ?? 14;
     }
 
+    // Load Habits
+    final rawHabits = prefs.getString(_habitsKey);
+    if (rawHabits != null) {
+      _habits = List<String>.from(jsonDecode(rawHabits) as List<dynamic>);
+    }
+
+    // Load Projects
+    final rawProjects = prefs.getString(_projectsKey);
+    if (rawProjects != null) {
+      _projects = List<String>.from(jsonDecode(rawProjects) as List<dynamic>);
+    }
+
     _loaded = true;
     notifyListeners();
   }
@@ -202,6 +222,26 @@ class TrioState extends ChangeNotifier {
       default:
         return 'Daily progress · Day $_trackDay/$_trackTotal';
     }
+  }
+
+  Future<void> addHabit(String habit) async {
+    _habits = [..._habits, habit];
+    await _persistHabits();
+  }
+
+  Future<void> removeHabit(String habit) async {
+    _habits = _habits.where((h) => h != habit).toList();
+    await _persistHabits();
+  }
+
+  Future<void> addProject(String project) async {
+    _projects = [..._projects, project];
+    await _persistProjects();
+  }
+
+  Future<void> removeProject(String project) async {
+    _projects = _projects.where((p) => p != project).toList();
+    await _persistProjects();
   }
 
   Future<void> updateGoalTitle(String goalId, String newTitle) async {
@@ -270,6 +310,18 @@ class TrioState extends ChangeNotifier {
     } else {
       await prefs.setString(_trackKey, payload);
     }
+    notifyListeners();
+  }
+
+  Future<void> _persistHabits() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_habitsKey, jsonEncode(_habits));
+    notifyListeners();
+  }
+
+  Future<void> _persistProjects() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_projectsKey, jsonEncode(_projects));
     notifyListeners();
   }
 }

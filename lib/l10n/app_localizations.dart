@@ -447,6 +447,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Days'**
   String get trackTotalHint;
+
+  /// No description provided for @homeStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get homeStreak;
+
+  /// No description provided for @habitsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Habits'**
+  String get habitsTitle;
+
+  /// No description provided for @projectsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get projectsTitle;
+
+  /// No description provided for @addHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Add habit'**
+  String get addHabit;
+
+  /// No description provided for @addProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add project'**
+  String get addProject;
+
+  /// No description provided for @emptyHabits.
+  ///
+  /// In en, this message translates to:
+  /// **'No habits yet'**
+  String get emptyHabits;
+
+  /// No description provided for @emptyProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'No projects yet'**
+  String get emptyProjects;
 }
 
 class _AppLocalizationsDelegate

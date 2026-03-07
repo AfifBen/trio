@@ -188,4 +188,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trackTotalHint => 'Days';
+
+  @override
+  String get homeStreak => 'Streak';
+
+  @override
+  String get habitsTitle => 'Habits';
+
+  @override
+  String get projectsTitle => 'Projects';
+
+  @override
+  String get addHabit => 'Add habit';
+
+  @override
+  String get addProject => 'Add project';
+
+  @override
+  String get emptyHabits => 'No habits yet';
+
+  @override
+  String get emptyProjects => 'No projects yet';
 }

@@ -56,6 +56,14 @@
   "trackTypeReading": "Lecture",
   "trackTypeSoft": "Soft skill",
   "trackTypeHard": "Hard skill",
-  "trackTotalHint": "Jours"
+  "trackTotalHint": "Jours",
+  "homeStreak": "Série",
+  "habitsTitle": "Habitudes",
+  "projectsTitle": "Projets",
+  "addHabit": "Ajouter une habitude",
+  "addProject": "Ajouter un projet",
+  "emptyHabits": "Aucune habitude",
+  "emptyProjects": "Aucun projet"
 }
+
 

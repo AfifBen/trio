@@ -56,6 +56,14 @@
   "trackTypeReading": "Reading",
   "trackTypeSoft": "Soft skill",
   "trackTypeHard": "Hard skill",
-  "trackTotalHint": "Days"
+  "trackTotalHint": "Days",
+  "homeStreak": "Streak",
+  "habitsTitle": "Habits",
+  "projectsTitle": "Projects",
+  "addHabit": "Add habit",
+  "addProject": "Add project",
+  "emptyHabits": "No habits yet",
+  "emptyProjects": "No projects yet"
 }
+
 

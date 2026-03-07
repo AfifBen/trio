@@ -187,4 +187,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trackTotalHint => 'أيام';
+
+  @override
+  String get homeStreak => 'سلسلة';
+
+  @override
+  String get habitsTitle => 'عادات';
+
+  @override
+  String get projectsTitle => 'مشاريع';
+
+  @override
+  String get addHabit => 'أضف عادة';
+
+  @override
+  String get addProject => 'أضف مشروعًا';
+
+  @override
+  String get emptyHabits => 'لا توجد عادات بعد';
+
+  @override
+  String get emptyProjects => 'لا توجد مشاريع بعد';
 }
