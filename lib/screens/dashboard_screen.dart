@@ -130,7 +130,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _showGoalDialog(BuildContext context) async {
-    final controllers = List.generate(3, (_) => TextEditingController());
+    final titleControllers = List.generate(3, (_) => TextEditingController());
+    final totalControllers = List.generate(3, (_) => TextEditingController(text: '4'));
 
     await showDialog<void>(
       context: context,
@@ -143,21 +144,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: List.generate(3, (index) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: TextField(
-                  controller: controllers[index],
-                  style: const TextStyle(color: Color(0xFFE0E0E0)),
-                  decoration: InputDecoration(
-                    hintText: 'Objectif ${index + 1}',
-                    hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextField(
+                        controller: titleControllers[index],
+                        style: const TextStyle(color: Color(0xFFE0E0E0)),
+                        decoration: InputDecoration(
+                          hintText: 'Objectif ${index + 1}',
+                          hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                          ),
+                        ),
+                      ),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: totalControllers[index],
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(color: Color(0xFFE0E0E0)),
+                        decoration: InputDecoration(
+                          hintText: 'Cycles',
+                          hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               );
             }),
@@ -169,12 +197,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                final titles = controllers
+                final titles = titleControllers
                     .map((c) => c.text.trim())
                     .where((t) => t.isNotEmpty)
                     .toList();
-                if (titles.length == 3) {
-                  context.read<TrioState>().setGoals(titles);
+                final totals = totalControllers
+                    .map((c) => int.tryParse(c.text.trim()) ?? 4)
+                    .toList();
+                if (titles.length == 3 && totals.length == 3) {
+                  context.read<TrioState>().setGoals(titles, totals);
                   Navigator.of(context).pop();
                 }
               },
@@ -191,7 +222,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _showSingleGoalEditDialog(BuildContext context, Goal goal) async {
-    final controller = TextEditingController(text: goal.title);
+    final titleController = TextEditingController(text: goal.title);
+    final totalController = TextEditingController(text: goal.sessionsTotal.toString());
 
     await showDialog<void>(
       context: context,
@@ -199,21 +231,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return AlertDialog(
           backgroundColor: const Color(0xFF131A24),
           title: const Text('Modifier cet objectif'),
-          content: TextField(
-            controller: controller,
-            style: const TextStyle(color: Color(0xFFE0E0E0)),
-            decoration: InputDecoration(
-              hintText: 'Nouvel objectif',
-              hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                style: const TextStyle(color: Color(0xFFE0E0E0)),
+                decoration: InputDecoration(
+                  hintText: 'Nouvel objectif',
+                  hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                  ),
+                ),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: totalController,
+                keyboardType: TextInputType.number,
+                style: const TextStyle(color: Color(0xFFE0E0E0)),
+                decoration: InputDecoration(
+                  hintText: 'Cycles',
+                  hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
           actions: [
             TextButton(
@@ -229,9 +284,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                final newTitle = controller.text.trim();
+                final newTitle = titleController.text.trim();
+                final newTotal = int.tryParse(totalController.text.trim()) ?? goal.sessionsTotal;
                 if (newTitle.isNotEmpty) {
                   context.read<TrioState>().updateGoalTitle(goal.id, newTitle);
+                  context.read<TrioState>().updateGoalTotal(goal.id, newTotal);
                   Navigator.of(context).pop();
                 }
               },

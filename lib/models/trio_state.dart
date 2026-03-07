@@ -120,15 +120,23 @@ class TrioState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setGoals(List<String> titles) async {
+  Future<void> setGoals(List<String> titles, List<int> totals) async {
     _goals = List.generate(3, (index) {
       return Goal(
         id: 'goal_${index + 1}',
         title: titles[index],
         sessionsDone: 0,
-        sessionsTotal: 4,
+        sessionsTotal: totals[index],
       );
     });
+    await _persistGoals();
+  }
+
+  Future<void> updateGoalTotal(String goalId, int total) async {
+    _goals = _goals.map((g) {
+      if (g.id != goalId) return g;
+      return g.copyWith(sessionsTotal: total);
+    }).toList();
     await _persistGoals();
   }
 
