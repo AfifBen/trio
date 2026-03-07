@@ -27,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Consumer<TrioState>(
           builder: (context, state, _) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
+            return Padding(
+              padding: const EdgeInsets.all(22),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       _LanguageMenu(
                         currentLocale: state.locale?.languageCode,
                         onSelect: (locale) => state.setLocale(locale),
-                      )
+                      ),
                     ],
                   ),
                   const SizedBox(height: 6),
@@ -55,126 +55,75 @@ class _HomeScreenState extends State<HomeScreen> {
                     t.homeTagline,
                     style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 14),
                   ),
-                  const SizedBox(height: 20),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF101826), Color(0xFF0E1420)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: const Color(0xFF1E2A38)),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x3300F0FF),
-                          blurRadius: 16,
-                          offset: Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              t.homeStreak,
-                              style: const TextStyle(color: Color(0xFF9AA4AF)),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(Icons.local_fire_department,
-                                    color: Color(0xFFFFD54F), size: 18),
-                                const SizedBox(width: 6),
-                                Text(
-                                  '${state.streakDays}d',
-                                  style: const TextStyle(
-                                    color: Color(0xFFFFD54F),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: [
-                            _StatChip(
-                              label: t.statsSessionsToday,
-                              value: '${state.sessionsToday}',
-                              icon: Icons.timer,
-                            ),
-                            _StatChip(
-                              label: t.statsMinutes,
-                              value: '${state.totalMinutes}',
-                              icon: Icons.bolt,
-                            ),
-                            _StatChip(
-                              label: t.statsGoals,
-                              value: '${state.goalsCompleted}/${state.goalsTotal}',
-                              icon: Icons.flag,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 24),
                   Text(
-                    t.progressOverview,
+                    t.todayTitle,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFFE6EDF3),
                     ),
                   ),
+                  const SizedBox(height: 14),
+                  Expanded(
+                    child: state.goals.isEmpty
+                        ? _EmptyState(onAdd: () => _openDashboard(context))
+                        : ListView.separated(
+                            itemCount: state.goals.length.clamp(0, 3),
+                            separatorBuilder: (_, __) => const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              final goal = state.goals[index];
+                              final progress = goal.sessionsTotal == 0
+                                  ? 0.0
+                                  : goal.sessionsDone / goal.sessionsTotal;
+                              return Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF101826),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: const Color(0xFF1E2A38)),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      goal.title.isEmpty ? t.emptyGoals : goal.title,
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFFE6EDF3),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    _CategoryChip(label: _categoryLabel(t, goal)),
+                                    const SizedBox(height: 12),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: LinearProgressIndicator(
+                                        minHeight: 8,
+                                        value: progress,
+                                        backgroundColor: const Color(0xFF0A0E14),
+                                        valueColor: const AlwaysStoppedAnimation<Color>(
+                                          Color(0xFF00F0FF),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      t.sessionsCount(goal.sessionsDone, goal.sessionsTotal),
+                                      style: const TextStyle(color: Color(0xFF9AA4AF)),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                  ),
                   const SizedBox(height: 12),
-                  _ProgressCard(
-                    title: t.projectsTitle,
-                    count: state.projects.length,
-                    done: state.goalsDoneByType('project'),
-                    total: state.goalsTotalByType('project'),
-                    icon: Icons.work_outline,
-                  ),
-                  const SizedBox(height: 10),
-                  _ProgressCard(
-                    title: t.habitsTitle,
-                    count: state.habits.length,
-                    done: state.goalsDoneByType('habit'),
-                    total: state.goalsTotalByType('habit'),
-                    icon: Icons.check_circle_outline,
-                  ),
-                  const SizedBox(height: 10),
-                  _ProgressCard(
-                    title: t.pathsTitle,
-                    count: state.paths.length,
-                    done: state.goalsDoneByType('path'),
-                    total: state.goalsTotalByType('path'),
-                    icon: Icons.route,
-                  ),
-                  const SizedBox(height: 10),
-                  _ProgressCard(
-                    title: t.workTitle,
-                    count: state.works.length,
-                    done: state.goalsDoneByType('work'),
-                    total: state.goalsTotalByType('work'),
-                    icon: Icons.business_center,
-                  ),
-                  const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const DashboardScreen()),
-                        );
-                      },
+                      onPressed: () => _openDashboard(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF00F0FF),
                         foregroundColor: const Color(0xFF0A0E14),
@@ -194,117 +143,22 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
 
-class _StatChip extends StatelessWidget {
-  final String label;
-  final String value;
-  final IconData icon;
-
-  const _StatChip({
-    required this.label,
-    required this.value,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0A0E14),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFF1E2A38)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: const Color(0xFF00F0FF)),
-          const SizedBox(width: 6),
-          Text(
-            '$value · $label',
-            style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 12),
-          ),
-        ],
-      ),
+  void _openDashboard(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const DashboardScreen()),
     );
   }
-}
 
-class _ProgressCard extends StatelessWidget {
-  final String title;
-  final int count;
-  final int done;
-  final int total;
-  final IconData icon;
-
-  const _ProgressCard({
-    required this.title,
-    required this.count,
-    required this.done,
-    required this.total,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final progress = total == 0 ? 0.0 : done / total;
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: const Color(0xFF101826),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF1E2A38)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0A0E14),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, size: 18, color: const Color(0xFF00F0FF)),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: Color(0xFFE6EDF3),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Text(
-                '$count',
-                style: const TextStyle(color: Color(0xFF9AA4AF)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
-              minHeight: 8,
-              value: progress,
-              backgroundColor: const Color(0xFF0A0E14),
-              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00F0FF)),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              '$done/$total',
-              style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 12),
-            ),
-          ),
-        ],
-      ),
-    );
+  String _categoryLabel(AppLocalizations t, dynamic goal) {
+    final typeLabel = switch (goal.categoryType) {
+      'project' => t.categoryProject,
+      'habit' => t.categoryHabit,
+      'path' => t.categoryPath,
+      _ => t.categoryWork,
+    };
+    if (goal.categoryItem.isEmpty) return typeLabel;
+    return '$typeLabel · ${goal.categoryItem}';
   }
 }
 
@@ -336,6 +190,57 @@ class _LanguageMenu extends StatelessWidget {
           child: Text('العربية'),
         ),
       ],
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  final VoidCallback onAdd;
+
+  const _EmptyState({required this.onAdd});
+
+  @override
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.inbox, color: Color(0xFF1E2A38), size: 64),
+          const SizedBox(height: 12),
+          Text(
+            t.emptyGoals,
+            style: const TextStyle(color: Color(0xFF9AA4AF)),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton(
+            onPressed: onAdd,
+            child: Text(t.openDashboard),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategoryChip extends StatelessWidget {
+  final String label;
+
+  const _CategoryChip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0A0E14),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFF1E2A38)),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 12),
+      ),
     );
   }
 }

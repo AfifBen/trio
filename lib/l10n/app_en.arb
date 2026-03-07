@@ -76,7 +76,8 @@
   "categoryWork": "Work",
   "categoryItemHint": "Category item",
   "goalCategoryHint": "Category",
-  "objectiveTitle": "Objective"
+  "objectiveTitle": "Objective",
+  "todayTitle": "Today"
 }
 
 

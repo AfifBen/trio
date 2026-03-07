@@ -567,6 +567,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Objective'**
   String get objectiveTitle;
+
+  /// No description provided for @todayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayTitle;
 }
 
 class _AppLocalizationsDelegate

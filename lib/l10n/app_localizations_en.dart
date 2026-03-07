@@ -248,4 +248,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get objectiveTitle => 'Objective';
+
+  @override
+  String get todayTitle => 'Today';
 }

@@ -249,4 +249,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get objectiveTitle => 'Objectif';
+
+  @override
+  String get todayTitle => 'Aujourd\'hui';
 }

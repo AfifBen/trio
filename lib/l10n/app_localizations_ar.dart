@@ -247,4 +247,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get objectiveTitle => 'هدف';
+
+  @override
+  String get todayTitle => 'اليوم';
 }

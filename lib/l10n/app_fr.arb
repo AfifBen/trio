@@ -76,7 +76,8 @@
   "categoryWork": "Travail",
   "categoryItemHint": "Élément",
   "goalCategoryHint": "Catégorie",
-  "objectiveTitle": "Objectif"
+  "objectiveTitle": "Objectif",
+  "todayTitle": "Aujourd'hui"
 }
 
 
