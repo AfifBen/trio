@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/goal.dart';
+import '../services/notification_service.dart';
 import 'reward_screen.dart';
 
 class FocusScreen extends StatefulWidget {
@@ -53,6 +54,7 @@ class _FocusScreenState extends State<FocusScreen> {
   }
 
   void _finishSession() {
+    NotificationService.showFocusComplete(goalTitle: widget.goal.title);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => RewardScreen(goal: widget.goal),
