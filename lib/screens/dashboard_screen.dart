@@ -73,11 +73,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           separatorBuilder: (_, __) => const SizedBox(height: 12),
                           itemBuilder: (context, index) {
                             final goal = goals[index];
-                            return GoalCard(
-                              goal: goal,
-                              onTap: () => _openFocus(context, goal),
-                              onLongPress: () => _showSingleGoalEditDialog(context, goal),
-                              onDelete: () => _confirmDeleteGoal(context, goal),
+                            return Dismissible(
+                              key: ValueKey(goal.id),
+                              direction: DismissDirection.endToStart,
+                              confirmDismiss: (_) => _confirmDeleteGoal(context, goal),
+                              background: Container(
+                                alignment: Alignment.centerRight,
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFF6B6B),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: const Icon(Icons.delete, color: Colors.white),
+                              ),
+                              child: GoalCard(
+                                goal: goal,
+                                onTap: () => _openFocus(context, goal),
+                                onLongPress: () => _showSingleGoalEditDialog(context, goal),
+                              ),
                             );
                           },
                         ),
@@ -234,8 +247,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Future<void> _confirmDeleteGoal(BuildContext context, Goal goal) async {
-    await showDialog<void>(
+  Future<bool> _confirmDeleteGoal(BuildContext context, Goal goal) async {
+    final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF131A24),
@@ -246,13 +259,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).pop(false),
             child: const Text('Annuler'),
           ),
           ElevatedButton(
             onPressed: () {
               context.read<TrioState>().resetGoal(goal.id);
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFF6B6B),
@@ -263,6 +276,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ],
       ),
     );
+    return result ?? false;
   }
 }
 
