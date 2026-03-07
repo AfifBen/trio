@@ -252,4 +252,33 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get todayTitle => 'Aujourd\'hui';
+
+  @override
+  String get setObjective => 'Définir\nl\'objectif';
+
+  @override
+  String get descriptionHint => 'Description (optionnel)';
+
+  @override
+  String get generate => 'Générer';
+
+  @override
+  String generatedProject(Object item) {
+    return 'Avancer le projet : $item';
+  }
+
+  @override
+  String generatedHabit(Object item) {
+    return 'Tenir l\'habitude : $item';
+  }
+
+  @override
+  String generatedPath(Object item) {
+    return 'Avancer dans le parcours : $item';
+  }
+
+  @override
+  String generatedWork(Object item) {
+    return 'Faire progresser le travail : $item';
+  }
 }

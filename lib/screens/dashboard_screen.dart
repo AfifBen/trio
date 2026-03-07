@@ -29,6 +29,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  String _generateDescription(
+    AppLocalizations t,
+    String title,
+    String category,
+    String type,
+  ) {
+    final item = category.isNotEmpty ? category : title;
+    return switch (type) {
+      'project' => t.generatedProject(item),
+      'habit' => t.generatedHabit(item),
+      'path' => t.generatedPath(item),
+      _ => t.generatedWork(item),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<TrioState>(
@@ -262,6 +277,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final titleControllers = List.generate(3, (_) => TextEditingController());
     final totalControllers = List.generate(3, (_) => TextEditingController(text: '4'));
     final categoryControllers = List.generate(3, (_) => TextEditingController());
+    final descriptionControllers = List.generate(3, (_) => TextEditingController());
     final categories = List.generate(3, (_) => 'project');
 
     final t = AppLocalizations.of(context)!;
@@ -372,6 +388,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: descriptionControllers[index],
+                              style: const TextStyle(color: Color(0xFFE0E0E0)),
+                              decoration: InputDecoration(
+                                hintText: t.descriptionHint,
+                                hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          OutlinedButton(
+                            onPressed: () {
+                              final title = titleControllers[index].text.trim();
+                              final category = categoryControllers[index].text.trim();
+                              descriptionControllers[index].text =
+                                  _generateDescription(t, title, category, categories[index]);
+                            },
+                            child: Text(t.generate),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 );
@@ -391,6 +440,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'total': int.tryParse(totalControllers[index].text.trim()) ?? 4,
                     'categoryType': categories[index],
                     'categoryItem': categoryControllers[index].text.trim(),
+                    'description': descriptionControllers[index].text.trim(),
                   };
                 }).where((row) => (row['title'] as String).isNotEmpty).toList();
 
@@ -406,6 +456,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     title: row['title'] as String,
                     categoryType: row['categoryType'] as String,
                     categoryItem: row['categoryItem'] as String,
+                    description: row['description'] as String,
                     sessionsDone: 0,
                     sessionsTotal: row['total'] as int,
                   );
@@ -435,6 +486,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final titleController = TextEditingController(text: goal.title);
     final totalController = TextEditingController(text: goal.sessionsTotal.toString());
     final categoryController = TextEditingController(text: goal.categoryItem);
+    final descriptionController = TextEditingController(text: goal.description);
     String categoryType = goal.categoryType;
 
     final t = AppLocalizations.of(context)!;
@@ -514,6 +566,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
               const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: descriptionController,
+                      style: const TextStyle(color: Color(0xFFE0E0E0)),
+                      decoration: InputDecoration(
+                        hintText: t.descriptionHint,
+                        hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  OutlinedButton(
+                    onPressed: () {
+                      final title = titleController.text.trim();
+                      final category = categoryController.text.trim();
+                      descriptionController.text =
+                          _generateDescription(t, title, category, categoryType);
+                    },
+                    child: Text(t.generate),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
               TextField(
                 controller: totalController,
                 keyboardType: TextInputType.number,
@@ -562,6 +647,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   sessionsTotal: newTotal,
                   categoryType: categoryType,
                   categoryItem: newCategoryItem,
+                  description: descriptionController.text.trim(),
                 );
                 await trio.setGoalsDetailed(
                   trio.goals.map((g) => g.id == updated.id ? updated : g).toList(),

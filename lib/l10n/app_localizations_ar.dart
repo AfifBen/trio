@@ -250,4 +250,33 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get todayTitle => 'اليوم';
+
+  @override
+  String get setObjective => 'تحديد\nالهدف';
+
+  @override
+  String get descriptionHint => 'الوصف (اختياري)';
+
+  @override
+  String get generate => 'توليد';
+
+  @override
+  String generatedProject(Object item) {
+    return 'تقدم في المشروع: $item';
+  }
+
+  @override
+  String generatedHabit(Object item) {
+    return 'الحفاظ على العادة: $item';
+  }
+
+  @override
+  String generatedPath(Object item) {
+    return 'التقدم في المسار: $item';
+  }
+
+  @override
+  String generatedWork(Object item) {
+    return 'تقدم في العمل: $item';
+  }
 }

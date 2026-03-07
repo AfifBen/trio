@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:trio/l10n/app_localizations.dart';
 import '../models/trio_state.dart';
 import 'dashboard_screen.dart';
+import 'focus_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -76,44 +77,58 @@ class _HomeScreenState extends State<HomeScreen> {
                               final progress = goal.sessionsTotal == 0
                                   ? 0.0
                                   : goal.sessionsDone / goal.sessionsTotal;
-                              return Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF101826),
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: const Color(0xFF1E2A38)),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      goal.title.isEmpty ? t.emptyGoals : goal.title,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFFE6EDF3),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    _CategoryChip(label: _categoryLabel(t, goal)),
-                                    const SizedBox(height: 12),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: LinearProgressIndicator(
-                                        minHeight: 8,
-                                        value: progress,
-                                        backgroundColor: const Color(0xFF0A0E14),
-                                        valueColor: const AlwaysStoppedAnimation<Color>(
-                                          Color(0xFF00F0FF),
+                              return GestureDetector(
+                                onTap: () => _openFocus(context, goal),
+                                onLongPress: () => _openDashboard(context),
+                                child: Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF101826),
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(color: const Color(0xFF1E2A38)),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        goal.title.isEmpty ? t.emptyGoals : goal.title,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFFE6EDF3),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      t.sessionsCount(goal.sessionsDone, goal.sessionsTotal),
-                                      style: const TextStyle(color: Color(0xFF9AA4AF)),
-                                    ),
-                                  ],
+                                      if (goal.description.isNotEmpty) ...[
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          goal.description,
+                                          style: const TextStyle(
+                                            color: Color(0xFF9AA4AF),
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                      const SizedBox(height: 6),
+                                      _CategoryChip(label: _categoryLabel(t, goal)),
+                                      const SizedBox(height: 12),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: LinearProgressIndicator(
+                                          minHeight: 8,
+                                          value: progress,
+                                          backgroundColor: const Color(0xFF0A0E14),
+                                          valueColor: const AlwaysStoppedAnimation<Color>(
+                                            Color(0xFF00F0FF),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        t.sessionsCount(goal.sessionsDone, goal.sessionsTotal),
+                                        style: const TextStyle(color: Color(0xFF9AA4AF)),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -123,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () => _openDashboard(context),
+                      onPressed: () => _openFocusFirst(context, state),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF00F0FF),
                         foregroundColor: const Color(0xFF0A0E14),
@@ -148,6 +163,20 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const DashboardScreen()),
     );
+  }
+
+  void _openFocus(BuildContext context, dynamic goal) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => FocusScreen(goal: goal)),
+    );
+  }
+
+  void _openFocusFirst(BuildContext context, TrioState state) {
+    if (state.goals.isEmpty) {
+      _openDashboard(context);
+      return;
+    }
+    _openFocus(context, state.goals.first);
   }
 
   String _categoryLabel(AppLocalizations t, dynamic goal) {
@@ -206,16 +235,39 @@ class _EmptyState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.inbox, color: Color(0xFF1E2A38), size: 64),
-          const SizedBox(height: 12),
+          GestureDetector(
+            onTap: onAdd,
+            child: Container(
+              height: 140,
+              width: 140,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: const Color(0xFF101826),
+                border: Border.all(color: const Color(0xFF00F0FF), width: 1.5),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x3300F0FF),
+                    blurRadius: 18,
+                    offset: Offset(0, 10),
+                  )
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  t.setObjective,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Color(0xFFE6EDF3),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
           Text(
             t.emptyGoals,
             style: const TextStyle(color: Color(0xFF9AA4AF)),
-          ),
-          const SizedBox(height: 12),
-          OutlinedButton(
-            onPressed: onAdd,
-            child: Text(t.openDashboard),
           ),
         ],
       ),

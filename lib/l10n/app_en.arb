@@ -77,7 +77,14 @@
   "categoryItemHint": "Category item",
   "goalCategoryHint": "Category",
   "objectiveTitle": "Objective",
-  "todayTitle": "Today"
+  "todayTitle": "Today",
+  "setObjective": "Set\nObjective",
+  "descriptionHint": "Description (optional)",
+  "generate": "Generate",
+  "generatedProject": "Advance the project: {item}",
+  "generatedHabit": "Maintain the habit: {item}",
+  "generatedPath": "Progress in the path: {item}",
+  "generatedWork": "Move the work forward: {item}"
 }
 
 

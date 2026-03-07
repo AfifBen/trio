@@ -573,6 +573,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today'**
   String get todayTitle;
+
+  /// No description provided for @setObjective.
+  ///
+  /// In en, this message translates to:
+  /// **'Set\nObjective'**
+  String get setObjective;
+
+  /// No description provided for @descriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Description (optional)'**
+  String get descriptionHint;
+
+  /// No description provided for @generate.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate'**
+  String get generate;
+
+  /// No description provided for @generatedProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Advance the project: {item}'**
+  String generatedProject(Object item);
+
+  /// No description provided for @generatedHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintain the habit: {item}'**
+  String generatedHabit(Object item);
+
+  /// No description provided for @generatedPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress in the path: {item}'**
+  String generatedPath(Object item);
+
+  /// No description provided for @generatedWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the work forward: {item}'**
+  String generatedWork(Object item);
 }
 
 class _AppLocalizationsDelegate

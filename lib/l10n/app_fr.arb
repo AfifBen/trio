@@ -77,7 +77,14 @@
   "categoryItemHint": "Élément",
   "goalCategoryHint": "Catégorie",
   "objectiveTitle": "Objectif",
-  "todayTitle": "Aujourd'hui"
+  "todayTitle": "Aujourd'hui",
+  "setObjective": "Définir\nl'objectif",
+  "descriptionHint": "Description (optionnel)",
+  "generate": "Générer",
+  "generatedProject": "Avancer le projet : {item}",
+  "generatedHabit": "Tenir l'habitude : {item}",
+  "generatedPath": "Avancer dans le parcours : {item}",
+  "generatedWork": "Faire progresser le travail : {item}"
 }
 
 

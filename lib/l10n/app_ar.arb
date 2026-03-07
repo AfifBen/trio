@@ -77,7 +77,14 @@
   "categoryItemHint": "عنصر الفئة",
   "goalCategoryHint": "الفئة",
   "objectiveTitle": "هدف",
-  "todayTitle": "اليوم"
+  "todayTitle": "اليوم",
+  "setObjective": "تحديد\nالهدف",
+  "descriptionHint": "الوصف (اختياري)",
+  "generate": "توليد",
+  "generatedProject": "تقدم في المشروع: {item}",
+  "generatedHabit": "الحفاظ على العادة: {item}",
+  "generatedPath": "التقدم في المسار: {item}",
+  "generatedWork": "تقدم في العمل: {item}"
 }
 
 

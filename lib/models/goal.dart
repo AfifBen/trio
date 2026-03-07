@@ -3,6 +3,7 @@ class Goal {
   final String title;
   final String categoryType; // project | habit | path | work
   final String categoryItem;
+  final String description;
   final int sessionsDone;
   final int sessionsTotal;
 
@@ -11,6 +12,7 @@ class Goal {
     required this.title,
     required this.categoryType,
     required this.categoryItem,
+    this.description = '',
     this.sessionsDone = 0,
     this.sessionsTotal = 4,
   });
@@ -22,6 +24,7 @@ class Goal {
     String? title,
     String? categoryType,
     String? categoryItem,
+    String? description,
     int? sessionsDone,
     int? sessionsTotal,
   }) {
@@ -30,6 +33,7 @@ class Goal {
       title: title ?? this.title,
       categoryType: categoryType ?? this.categoryType,
       categoryItem: categoryItem ?? this.categoryItem,
+      description: description ?? this.description,
       sessionsDone: sessionsDone ?? this.sessionsDone,
       sessionsTotal: sessionsTotal ?? this.sessionsTotal,
     );
@@ -40,6 +44,7 @@ class Goal {
         'title': title,
         'categoryType': categoryType,
         'categoryItem': categoryItem,
+        'description': description,
         'sessionsDone': sessionsDone,
         'sessionsTotal': sessionsTotal,
       };
@@ -49,6 +54,7 @@ class Goal {
         title: json['title'] as String,
         categoryType: json['categoryType'] as String? ?? 'work',
         categoryItem: json['categoryItem'] as String? ?? '',
+        description: json['description'] as String? ?? '',
         sessionsDone: json['sessionsDone'] as int? ?? 0,
         sessionsTotal: json['sessionsTotal'] as int? ?? 4,
       );
