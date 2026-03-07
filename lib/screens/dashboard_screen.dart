@@ -544,21 +544,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onPressed: () async {
                 final newTitle = titleController.text.trim();
                 final newTotal = int.tryParse(totalController.text.trim()) ?? goal.sessionsTotal;
-                final newCategoryItem = categoryController.text.trim();
-                if (newTitle.isNotEmpty && newCategoryItem.isNotEmpty) {
-                  final trio = context.read<TrioState>();
-                  await trio.ensureCategoryItem(categoryType, newCategoryItem);
-                  final updated = goal.copyWith(
-                    title: newTitle,
-                    sessionsTotal: newTotal,
-                    categoryType: categoryType,
-                    categoryItem: newCategoryItem,
-                  );
-                  await trio.setGoalsDetailed(
-                    trio.goals.map((g) => g.id == updated.id ? updated : g).toList(),
-                  );
-                  if (context.mounted) Navigator.of(context).pop();
-                }
+                final newCategoryItemRaw = categoryController.text.trim();
+                if (newTitle.isEmpty) return;
+
+                final newCategoryItem =
+                    newCategoryItemRaw.isEmpty ? goal.categoryItem : newCategoryItemRaw;
+
+                final trio = context.read<TrioState>();
+                await trio.ensureCategoryItem(categoryType, newCategoryItem);
+                final updated = goal.copyWith(
+                  title: newTitle,
+                  sessionsTotal: newTotal,
+                  categoryType: categoryType,
+                  categoryItem: newCategoryItem,
+                );
+                await trio.setGoalsDetailed(
+                  trio.goals.map((g) => g.id == updated.id ? updated : g).toList(),
+                );
+                if (context.mounted) Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF00F0FF),
