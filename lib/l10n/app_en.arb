@@ -63,7 +63,20 @@
   "addHabit": "Add habit",
   "addProject": "Add project",
   "emptyHabits": "No habits yet",
-  "emptyProjects": "No projects yet"
+  "emptyProjects": "No projects yet",
+  "pathsTitle": "Paths",
+  "workTitle": "Work",
+  "progressOverview": "Progress overview",
+  "statsSessionsToday": "Sessions today",
+  "statsMinutes": "Minutes",
+  "statsGoals": "Goals",
+  "categoryProject": "Project",
+  "categoryHabit": "Habit",
+  "categoryPath": "Path",
+  "categoryWork": "Work",
+  "categoryItemHint": "Category item",
+  "goalCategoryHint": "Category",
+  "objectiveTitle": "Objective"
 }
 
 

@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:trio/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:trio/l10n/app_localizations.dart';
 import '../models/trio_state.dart';
 import 'dashboard_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => context.read<TrioState>().load());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,35 +25,54 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E14),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              const Text(
-                'TRIO',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFE0E0E0),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                t.homeTagline,
-                style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 16),
-              ),
-              const SizedBox(height: 20),
-              Consumer<TrioState>(
-                builder: (context, state, _) {
-                  return Container(
-                    width: double.infinity,
+        child: Consumer<TrioState>(
+          builder: (context, state, _) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'TRIO',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                          color: Color(0xFFE6EDF3),
+                        ),
+                      ),
+                      _LanguageMenu(
+                        currentLocale: state.locale?.languageCode,
+                        onSelect: (locale) => state.setLocale(locale),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    t.homeTagline,
+                    style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 14),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF131A24),
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF101826), Color(0xFF0E1420)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: const Color(0xFF1E2A38)),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x3300F0FF),
+                          blurRadius: 16,
+                          offset: Offset(0, 8),
+                        ),
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,12 +87,12 @@ class HomeScreen extends StatelessWidget {
                             Row(
                               children: [
                                 const Icon(Icons.local_fire_department,
-                                    color: Color(0xFFFFD700), size: 18),
-                                const SizedBox(width: 4),
+                                    color: Color(0xFFFFD54F), size: 18),
+                                const SizedBox(width: 6),
                                 Text(
                                   '${state.streakDays}d',
                                   style: const TextStyle(
-                                    color: Color(0xFFFFD700),
+                                    color: Color(0xFFFFD54F),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -70,200 +100,242 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        Row(
+                        const SizedBox(height: 16),
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
                           children: [
-                            _miniCard(
-                              icon: Icons.check_circle_outline,
-                              title: t.habitsTitle,
-                              subtitle: state.habits.isEmpty
-                                  ? t.emptyHabits
-                                  : state.habits.first,
+                            _StatChip(
+                              label: t.statsSessionsToday,
+                              value: '${state.sessionsToday}',
+                              icon: Icons.timer,
                             ),
-                            const SizedBox(width: 12),
-                            _miniCard(
-                              icon: Icons.work_outline,
-                              title: t.projectsTitle,
-                              subtitle: state.projects.isEmpty
-                                  ? t.emptyProjects
-                                  : state.projects.first,
+                            _StatChip(
+                              label: t.statsMinutes,
+                              value: '${state.totalMinutes}',
+                              icon: Icons.bolt,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            OutlinedButton(
-                              onPressed: () => _addHabit(context),
-                              child: Text(t.addHabit),
-                            ),
-                            const SizedBox(width: 8),
-                            OutlinedButton(
-                              onPressed: () => _addProject(context),
-                              child: Text(t.addProject),
+                            _StatChip(
+                              label: t.statsGoals,
+                              value: '${state.goalsCompleted}/${state.goalsTotal}',
+                              icon: Icons.flag,
                             ),
                           ],
                         ),
                       ],
                     ),
-                  );
-                },
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const DashboardScreen(autoOpenDialog: true),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    t.progressOverview,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFE6EDF3),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  _ProgressCard(
+                    title: t.projectsTitle,
+                    count: state.projects.length,
+                    done: state.goalsDoneByType('project'),
+                    total: state.goalsTotalByType('project'),
+                    icon: Icons.work_outline,
+                  ),
+                  const SizedBox(height: 10),
+                  _ProgressCard(
+                    title: t.habitsTitle,
+                    count: state.habits.length,
+                    done: state.goalsDoneByType('habit'),
+                    total: state.goalsTotalByType('habit'),
+                    icon: Icons.check_circle_outline,
+                  ),
+                  const SizedBox(height: 10),
+                  _ProgressCard(
+                    title: t.pathsTitle,
+                    count: state.paths.length,
+                    done: state.goalsDoneByType('path'),
+                    total: state.goalsTotalByType('path'),
+                    icon: Icons.route,
+                  ),
+                  const SizedBox(height: 10),
+                  _ProgressCard(
+                    title: t.workTitle,
+                    count: state.works.length,
+                    done: state.goalsDoneByType('work'),
+                    total: state.goalsTotalByType('work'),
+                    icon: Icons.business_center,
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF00F0FF),
+                        foregroundColor: const Color(0xFF0A0E14),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00F0FF),
-                    foregroundColor: const Color(0xFF0A0E14),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      child: Text(t.startFocus),
                     ),
                   ),
-                  child: Text(t.start),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _StatChip extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+
+  const _StatChip({
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0A0E14),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFF1E2A38)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: const Color(0xFF00F0FF)),
+          const SizedBox(width: 6),
+          Text(
+            '$value · $label',
+            style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProgressCard extends StatelessWidget {
+  final String title;
+  final int count;
+  final int done;
+  final int total;
+  final IconData icon;
+
+  const _ProgressCard({
+    required this.title,
+    required this.count,
+    required this.done,
+    required this.total,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = total == 0 ? 0.0 : done / total;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFF101826),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF1E2A38)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0A0E14),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, size: 18, color: const Color(0xFF00F0FF)),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Color(0xFFE6EDF3),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const DashboardScreen()),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFFE0E0E0),
-                    side: const BorderSide(color: Color(0xFF1E2A38)),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  child: Text(t.openDashboard),
-                ),
+              Text(
+                '$count',
+                style: const TextStyle(color: Color(0xFF9AA4AF)),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _miniCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-  }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: const Color(0xFF0A0E14),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFF1E2A38)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: const Color(0xFF00F0FF), size: 20),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(color: Color(0xFFE0E0E0)),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: LinearProgressIndicator(
+              minHeight: 8,
+              value: progress,
+              backgroundColor: const Color(0xFF0A0E14),
+              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00F0FF)),
             ),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              '$done/$total',
               style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 12),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _addHabit(BuildContext context) async {
-    final t = AppLocalizations.of(context)!;
-    final controller = TextEditingController();
-
-    await showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF131A24),
-        title: Text(t.addHabit),
-        content: TextField(
-          controller: controller,
-          style: const TextStyle(color: Color(0xFFE0E0E0)),
-          decoration: const InputDecoration(
-            hintText: 'Ex: 10 min lecture',
-            hintStyle: TextStyle(color: Color(0xFF9AA4AF)),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(t.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final value = controller.text.trim();
-              if (value.isNotEmpty) {
-                context.read<TrioState>().addHabit(value);
-                Navigator.of(context).pop();
-              }
-            },
-            child: Text(t.save),
-          )
         ],
       ),
     );
   }
+}
 
-  Future<void> _addProject(BuildContext context) async {
-    final t = AppLocalizations.of(context)!;
-    final controller = TextEditingController();
+class _LanguageMenu extends StatelessWidget {
+  final String? currentLocale;
+  final ValueChanged<Locale> onSelect;
 
-    await showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF131A24),
-        title: Text(t.addProject),
-        content: TextField(
-          controller: controller,
-          style: const TextStyle(color: Color(0xFFE0E0E0)),
-          decoration: const InputDecoration(
-            hintText: 'Ex: Lancer la V1',
-            hintStyle: TextStyle(color: Color(0xFF9AA4AF)),
-          ),
+  const _LanguageMenu({
+    required this.currentLocale,
+    required this.onSelect,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<Locale>(
+      icon: const Icon(Icons.language, color: Color(0xFF9AA4AF)),
+      onSelected: onSelect,
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: Locale('en'),
+          child: Text('English'),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(t.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final value = controller.text.trim();
-              if (value.isNotEmpty) {
-                context.read<TrioState>().addProject(value);
-                Navigator.of(context).pop();
-              }
-            },
-            child: Text(t.save),
-          )
-        ],
-      ),
+        const PopupMenuItem(
+          value: Locale('fr'),
+          child: Text('Français'),
+        ),
+        const PopupMenuItem(
+          value: Locale('ar'),
+          child: Text('العربية'),
+        ),
+      ],
     );
   }
 }

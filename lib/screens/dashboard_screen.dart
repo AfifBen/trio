@@ -261,6 +261,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> _showGoalDialog(BuildContext context) async {
     final titleControllers = List.generate(3, (_) => TextEditingController());
     final totalControllers = List.generate(3, (_) => TextEditingController(text: '4'));
+    final categoryControllers = List.generate(3, (_) => TextEditingController());
+    final categories = List.generate(3, (_) => 'project');
 
     final t = AppLocalizations.of(context)!;
 
@@ -270,56 +272,111 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return AlertDialog(
           backgroundColor: const Color(0xFF131A24),
           title: Text(t.setGoalsTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(3, (index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: TextField(
-                        controller: titleControllers[index],
-                        style: const TextStyle(color: Color(0xFFE0E0E0)),
-                        decoration: InputDecoration(
-                          hintText: t.goalHint(index + 1),
-                          hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(3, (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                              controller: titleControllers[index],
+                              style: const TextStyle(color: Color(0xFFE0E0E0)),
+                              decoration: InputDecoration(
+                                hintText: t.goalHint(index + 1),
+                                hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                                ),
+                              ),
+                            ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              controller: totalControllers[index],
+                              keyboardType: TextInputType.number,
+                              style: const TextStyle(color: Color(0xFFE0E0E0)),
+                              decoration: InputDecoration(
+                                hintText: t.cyclesHint,
+                                hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: totalControllers[index],
-                        keyboardType: TextInputType.number,
-                        style: const TextStyle(color: Color(0xFFE0E0E0)),
-                        decoration: InputDecoration(
-                          hintText: t.cyclesHint,
-                          hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: DropdownButtonFormField<String>(
+                              value: categories[index],
+                              dropdownColor: const Color(0xFF131A24),
+                              items: [
+                                DropdownMenuItem(value: 'project', child: Text(t.categoryProject)),
+                                DropdownMenuItem(value: 'habit', child: Text(t.categoryHabit)),
+                                DropdownMenuItem(value: 'path', child: Text(t.categoryPath)),
+                                DropdownMenuItem(value: 'work', child: Text(t.categoryWork)),
+                              ],
+                              onChanged: (val) => categories[index] = val ?? 'project',
+                              decoration: InputDecoration(
+                                hintText: t.goalCategoryHint,
+                                hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                                ),
+                              ),
+                            ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              controller: categoryControllers[index],
+                              style: const TextStyle(color: Color(0xFFE0E0E0)),
+                              decoration: InputDecoration(
+                                hintText: t.categoryItemHint,
+                                hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+                    ],
+                  ),
+                );
+              }),
+            ),
           ),
           actions: [
             TextButton(
@@ -327,18 +384,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Text(t.cancel),
             ),
             ElevatedButton(
-              onPressed: () {
-                final titles = titleControllers
-                    .map((c) => c.text.trim())
-                    .where((t) => t.isNotEmpty)
-                    .toList();
+              onPressed: () async {
+                final titles = titleControllers.map((c) => c.text.trim()).toList();
                 final totals = totalControllers
                     .map((c) => int.tryParse(c.text.trim()) ?? 4)
                     .toList();
-                if (titles.length == 3 && totals.length == 3) {
-                  context.read<TrioState>().setGoals(titles, totals);
-                  Navigator.of(context).pop();
+                final categoryItems = categoryControllers.map((c) => c.text.trim()).toList();
+
+                if (titles.any((t) => t.isEmpty) || categoryItems.any((c) => c.isEmpty)) {
+                  return;
                 }
+
+                final goals = List.generate(3, (index) {
+                  return Goal(
+                    id: 'goal_${index + 1}',
+                    title: titles[index],
+                    categoryType: categories[index],
+                    categoryItem: categoryItems[index],
+                    sessionsDone: 0,
+                    sessionsTotal: totals[index],
+                  );
+                });
+
+                final trio = context.read<TrioState>();
+                for (final goal in goals) {
+                  await trio.ensureCategoryItem(goal.categoryType, goal.categoryItem);
+                }
+
+                await trio.setGoalsDetailed(goals);
+                if (context.mounted) Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF00F0FF),
@@ -355,6 +429,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> _showSingleGoalEditDialog(BuildContext context, Goal goal) async {
     final titleController = TextEditingController(text: goal.title);
     final totalController = TextEditingController(text: goal.sessionsTotal.toString());
+    final categoryController = TextEditingController(text: goal.categoryItem);
+    String categoryType = goal.categoryType;
 
     final t = AppLocalizations.of(context)!;
 
@@ -382,6 +458,55 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     borderSide: const BorderSide(color: Color(0xFF00F0FF)),
                   ),
                 ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: categoryType,
+                      dropdownColor: const Color(0xFF131A24),
+                      items: [
+                        DropdownMenuItem(value: 'project', child: Text(t.categoryProject)),
+                        DropdownMenuItem(value: 'habit', child: Text(t.categoryHabit)),
+                        DropdownMenuItem(value: 'path', child: Text(t.categoryPath)),
+                        DropdownMenuItem(value: 'work', child: Text(t.categoryWork)),
+                      ],
+                      onChanged: (val) => categoryType = val ?? 'project',
+                      decoration: InputDecoration(
+                        hintText: t.goalCategoryHint,
+                        hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: categoryController,
+                      style: const TextStyle(color: Color(0xFFE0E0E0)),
+                      decoration: InputDecoration(
+                        hintText: t.categoryItemHint,
+                        hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               TextField(
@@ -416,13 +541,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Text(t.delete, style: const TextStyle(color: Color(0xFFFF6B6B))),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final newTitle = titleController.text.trim();
                 final newTotal = int.tryParse(totalController.text.trim()) ?? goal.sessionsTotal;
-                if (newTitle.isNotEmpty) {
-                  context.read<TrioState>().updateGoalTitle(goal.id, newTitle);
-                  context.read<TrioState>().updateGoalTotal(goal.id, newTotal);
-                  Navigator.of(context).pop();
+                final newCategoryItem = categoryController.text.trim();
+                if (newTitle.isNotEmpty && newCategoryItem.isNotEmpty) {
+                  final trio = context.read<TrioState>();
+                  await trio.ensureCategoryItem(categoryType, newCategoryItem);
+                  final updated = goal.copyWith(
+                    title: newTitle,
+                    sessionsTotal: newTotal,
+                    categoryType: categoryType,
+                    categoryItem: newCategoryItem,
+                  );
+                  await trio.setGoalsDetailed(
+                    trio.goals.map((g) => g.id == updated.id ? updated : g).toList(),
+                  );
+                  if (context.mounted) Navigator.of(context).pop();
                 }
               },
               style: ElevatedButton.styleFrom(

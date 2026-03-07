@@ -208,4 +208,43 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get emptyProjects => 'لا توجد مشاريع بعد';
+
+  @override
+  String get pathsTitle => 'مسارات';
+
+  @override
+  String get workTitle => 'عمل';
+
+  @override
+  String get progressOverview => 'نظرة على التقدم';
+
+  @override
+  String get statsSessionsToday => 'جلسات اليوم';
+
+  @override
+  String get statsMinutes => 'دقائق';
+
+  @override
+  String get statsGoals => 'أهداف';
+
+  @override
+  String get categoryProject => 'مشروع';
+
+  @override
+  String get categoryHabit => 'عادة';
+
+  @override
+  String get categoryPath => 'مسار';
+
+  @override
+  String get categoryWork => 'عمل';
+
+  @override
+  String get categoryItemHint => 'عنصر الفئة';
+
+  @override
+  String get goalCategoryHint => 'الفئة';
+
+  @override
+  String get objectiveTitle => 'هدف';
 }

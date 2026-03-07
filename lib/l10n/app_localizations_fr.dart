@@ -210,4 +210,43 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get emptyProjects => 'Aucun projet';
+
+  @override
+  String get pathsTitle => 'Parcours';
+
+  @override
+  String get workTitle => 'Travail';
+
+  @override
+  String get progressOverview => 'Vue d\'avancement';
+
+  @override
+  String get statsSessionsToday => 'Sessions aujourd\'hui';
+
+  @override
+  String get statsMinutes => 'Minutes';
+
+  @override
+  String get statsGoals => 'Objectifs';
+
+  @override
+  String get categoryProject => 'Projet';
+
+  @override
+  String get categoryHabit => 'Habitude';
+
+  @override
+  String get categoryPath => 'Parcours';
+
+  @override
+  String get categoryWork => 'Travail';
+
+  @override
+  String get categoryItemHint => 'Élément';
+
+  @override
+  String get goalCategoryHint => 'Catégorie';
+
+  @override
+  String get objectiveTitle => 'Objectif';
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'goal.dart';
 
@@ -45,6 +46,9 @@ class TrioState extends ChangeNotifier {
   static const _trackKey = 'trio_track';
   static const _habitsKey = 'trio_habits';
   static const _projectsKey = 'trio_projects';
+  static const _pathsKey = 'trio_paths';
+  static const _worksKey = 'trio_works';
+  static const _localeKey = 'trio_locale';
 
   List<Goal> _goals = [];
   List<FocusSession> _sessions = [];
@@ -57,6 +61,10 @@ class TrioState extends ChangeNotifier {
 
   List<String> _habits = [];
   List<String> _projects = [];
+  List<String> _paths = [];
+  List<String> _works = [];
+
+  Locale? _locale;
 
   List<Goal> get goals => _goals;
   List<FocusSession> get sessions => _sessions;
@@ -70,11 +78,24 @@ class TrioState extends ChangeNotifier {
 
   List<String> get habits => _habits;
   List<String> get projects => _projects;
+  List<String> get paths => _paths;
+  List<String> get works => _works;
+
+  Locale? get locale => _locale;
 
   // Statistiques calculées
   int get totalMinutes => _sessions.fold(0, (sum, s) => sum + s.durationMinutes);
 
   int get sessionsToday => _sessions.where((s) => _isSameDay(s.timestamp, DateTime.now())).length;
+
+  int goalsDoneByType(String type) =>
+      _goals.where((g) => g.categoryType == type && g.completed).length;
+
+  int goalsTotalByType(String type) =>
+      _goals.where((g) => g.categoryType == type).length;
+
+  int goalsTotal => _goals.length;
+  int goalsCompleted => _goals.where((g) => g.completed).length;
 
   int get streakDays {
     if (_sessions.isEmpty) return 0;
@@ -121,7 +142,7 @@ class TrioState extends ChangeNotifier {
   Future<void> load() async {
     if (_loaded) return;
     final prefs = await SharedPreferences.getInstance();
-    
+
     // Load Goals
     final rawGoals = prefs.getString(_goalsKey);
     if (rawGoals != null) {
@@ -158,6 +179,25 @@ class TrioState extends ChangeNotifier {
       _projects = List<String>.from(jsonDecode(rawProjects) as List<dynamic>);
     }
 
+    // Load Paths
+    final rawPaths = prefs.getString(_pathsKey);
+    if (rawPaths != null) {
+      _paths = List<String>.from(jsonDecode(rawPaths) as List<dynamic>);
+    }
+
+    // Load Works
+    final rawWorks = prefs.getString(_worksKey);
+    if (rawWorks != null) {
+      _works = List<String>.from(jsonDecode(rawWorks) as List<dynamic>);
+    }
+
+    // Load Locale
+    final rawLocale = prefs.getString(_localeKey);
+    if (rawLocale != null) {
+      final parts = rawLocale.split('_');
+      _locale = parts.length > 1 ? Locale(parts[0], parts[1]) : Locale(parts[0]);
+    }
+
     _loaded = true;
     notifyListeners();
   }
@@ -167,10 +207,17 @@ class TrioState extends ChangeNotifier {
       return Goal(
         id: 'goal_${index + 1}',
         title: titles[index],
+        categoryType: 'work',
+        categoryItem: 'Work',
         sessionsDone: 0,
         sessionsTotal: totals[index],
       );
     });
+    await _persistGoals();
+  }
+
+  Future<void> setGoalsDetailed(List<Goal> goals) async {
+    _goals = goals;
     await _persistGoals();
   }
 
@@ -242,6 +289,64 @@ class TrioState extends ChangeNotifier {
   Future<void> removeProject(String project) async {
     _projects = _projects.where((p) => p != project).toList();
     await _persistProjects();
+  }
+
+  Future<void> addPath(String path) async {
+    _paths = [..._paths, path];
+    await _persistPaths();
+  }
+
+  Future<void> removePath(String path) async {
+    _paths = _paths.where((p) => p != path).toList();
+    await _persistPaths();
+  }
+
+  Future<void> addWork(String work) async {
+    _works = [..._works, work];
+    await _persistWorks();
+  }
+
+  Future<void> removeWork(String work) async {
+    _works = _works.where((w) => w != work).toList();
+    await _persistWorks();
+  }
+
+  Future<void> ensureCategoryItem(String type, String item) async {
+    if (item.trim().isEmpty) return;
+    switch (type) {
+      case 'habit':
+        if (!_habits.contains(item)) {
+          _habits = [..._habits, item];
+          await _persistHabits();
+        }
+        break;
+      case 'project':
+        if (!_projects.contains(item)) {
+          _projects = [..._projects, item];
+          await _persistProjects();
+        }
+        break;
+      case 'path':
+        if (!_paths.contains(item)) {
+          _paths = [..._paths, item];
+          await _persistPaths();
+        }
+        break;
+      case 'work':
+      default:
+        if (!_works.contains(item)) {
+          _works = [..._works, item];
+          await _persistWorks();
+        }
+        break;
+    }
+  }
+
+  Future<void> setLocale(Locale locale) async {
+    _locale = locale;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_localeKey, locale.toString());
+    notifyListeners();
   }
 
   Future<void> updateGoalTitle(String goalId, String newTitle) async {
@@ -322,6 +427,18 @@ class TrioState extends ChangeNotifier {
   Future<void> _persistProjects() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_projectsKey, jsonEncode(_projects));
+    notifyListeners();
+  }
+
+  Future<void> _persistPaths() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_pathsKey, jsonEncode(_paths));
+    notifyListeners();
+  }
+
+  Future<void> _persistWorks() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_worksKey, jsonEncode(_works));
     notifyListeners();
   }
 }

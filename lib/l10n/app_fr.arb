@@ -63,7 +63,20 @@
   "addHabit": "Ajouter une habitude",
   "addProject": "Ajouter un projet",
   "emptyHabits": "Aucune habitude",
-  "emptyProjects": "Aucun projet"
+  "emptyProjects": "Aucun projet",
+  "pathsTitle": "Parcours",
+  "workTitle": "Travail",
+  "progressOverview": "Vue d'avancement",
+  "statsSessionsToday": "Sessions aujourd'hui",
+  "statsMinutes": "Minutes",
+  "statsGoals": "Objectifs",
+  "categoryProject": "Projet",
+  "categoryHabit": "Habitude",
+  "categoryPath": "Parcours",
+  "categoryWork": "Travail",
+  "categoryItemHint": "Élément",
+  "goalCategoryHint": "Catégorie",
+  "objectiveTitle": "Objectif"
 }
 
 

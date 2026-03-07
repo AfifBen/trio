@@ -63,7 +63,20 @@
   "addHabit": "أضف عادة",
   "addProject": "أضف مشروعًا",
   "emptyHabits": "لا توجد عادات بعد",
-  "emptyProjects": "لا توجد مشاريع بعد"
+  "emptyProjects": "لا توجد مشاريع بعد",
+  "pathsTitle": "مسارات",
+  "workTitle": "عمل",
+  "progressOverview": "نظرة على التقدم",
+  "statsSessionsToday": "جلسات اليوم",
+  "statsMinutes": "دقائق",
+  "statsGoals": "أهداف",
+  "categoryProject": "مشروع",
+  "categoryHabit": "عادة",
+  "categoryPath": "مسار",
+  "categoryWork": "عمل",
+  "categoryItemHint": "عنصر الفئة",
+  "goalCategoryHint": "الفئة",
+  "objectiveTitle": "هدف"
 }
 
 

@@ -489,6 +489,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No projects yet'**
   String get emptyProjects;
+
+  /// No description provided for @pathsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Paths'**
+  String get pathsTitle;
+
+  /// No description provided for @workTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get workTitle;
+
+  /// No description provided for @progressOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress overview'**
+  String get progressOverview;
+
+  /// No description provided for @statsSessionsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions today'**
+  String get statsSessionsToday;
+
+  /// No description provided for @statsMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get statsMinutes;
+
+  /// No description provided for @statsGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get statsGoals;
+
+  /// No description provided for @categoryProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get categoryProject;
+
+  /// No description provided for @categoryHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit'**
+  String get categoryHabit;
+
+  /// No description provided for @categoryPath.
+  ///
+  /// In en, this message translates to:
+  /// **'Path'**
+  String get categoryPath;
+
+  /// No description provided for @categoryWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get categoryWork;
+
+  /// No description provided for @categoryItemHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Category item'**
+  String get categoryItemHint;
+
+  /// No description provided for @goalCategoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get goalCategoryHint;
+
+  /// No description provided for @objectiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Objective'**
+  String get objectiveTitle;
 }
 
 class _AppLocalizationsDelegate

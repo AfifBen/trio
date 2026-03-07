@@ -40,6 +40,8 @@ class GoalCard extends StatelessWidget {
                   color: Color(0xFFE0E0E0),
                 ),
               ),
+              const SizedBox(height: 6),
+              _CategoryChip(label: _categoryLabel(t, goal)),
               const SizedBox(height: 12),
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
@@ -76,6 +78,39 @@ class GoalCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  String _categoryLabel(AppLocalizations t, Goal goal) {
+    final typeLabel = switch (goal.categoryType) {
+      'project' => t.categoryProject,
+      'habit' => t.categoryHabit,
+      'path' => t.categoryPath,
+      _ => t.categoryWork,
+    };
+    if (goal.categoryItem.isEmpty) return typeLabel;
+    return '$typeLabel · ${goal.categoryItem}';
+  }
+}
+
+class _CategoryChip extends StatelessWidget {
+  final String label;
+
+  const _CategoryChip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0A0E14),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFF1E2A38)),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 12),
       ),
     );
   }

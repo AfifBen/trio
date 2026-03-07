@@ -209,4 +209,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyProjects => 'No projects yet';
+
+  @override
+  String get pathsTitle => 'Paths';
+
+  @override
+  String get workTitle => 'Work';
+
+  @override
+  String get progressOverview => 'Progress overview';
+
+  @override
+  String get statsSessionsToday => 'Sessions today';
+
+  @override
+  String get statsMinutes => 'Minutes';
+
+  @override
+  String get statsGoals => 'Goals';
+
+  @override
+  String get categoryProject => 'Project';
+
+  @override
+  String get categoryHabit => 'Habit';
+
+  @override
+  String get categoryPath => 'Path';
+
+  @override
+  String get categoryWork => 'Work';
+
+  @override
+  String get categoryItemHint => 'Category item';
+
+  @override
+  String get goalCategoryHint => 'Category';
+
+  @override
+  String get objectiveTitle => 'Objective';
 }
