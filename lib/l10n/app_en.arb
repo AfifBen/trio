@@ -43,5 +43,19 @@
   "inProgress": "In progress",
   "sessionsCount": "{done}/{total} sessions",
   "focusCompleteTitle": "Focus complete 🎉",
-  "focusCompleteBody": "Great job! You finished \"{goal}\". Move to the next win."
+  "focusCompleteBody": "Great job! You finished \"{goal}\". Move to the next win.",
+  "trackBlockTitle": "Active path",
+  "trackNone": "No active path",
+  "trackActivate": "Activate",
+  "trackDeactivate": "Stop path",
+  "trackDaily": "Today",
+  "trackAdvance": "Mark done",
+  "trackUseAsGoal": "Use as Goal 1",
+  "trackDialogTitle": "Activate a path",
+  "trackNameHint": "Course or book name",
+  "trackTypeReading": "Reading",
+  "trackTypeSoft": "Soft skill",
+  "trackTypeHard": "Hard skill",
+  "trackTotalHint": "Days"
 }
+

@@ -42,14 +42,26 @@ class FocusSession {
 class TrioState extends ChangeNotifier {
   static const _goalsKey = 'trio_goals';
   static const _sessionsKey = 'trio_sessions';
+  static const _trackKey = 'trio_track';
 
   List<Goal> _goals = [];
   List<FocusSession> _sessions = [];
   bool _loaded = false;
 
+  String? _trackName;
+  String? _trackType; // reading | soft | hard
+  int _trackDay = 1;
+  int _trackTotal = 14;
+
   List<Goal> get goals => _goals;
   List<FocusSession> get sessions => _sessions;
   bool get loaded => _loaded;
+
+  String? get trackName => _trackName;
+  String? get trackType => _trackType;
+  int get trackDay => _trackDay;
+  int get trackTotal => _trackTotal;
+  bool get hasTrack => _trackName != null && _trackType != null;
 
   // Statistiques calculées
   int get totalMinutes => _sessions.fold(0, (sum, s) => sum + s.durationMinutes);
@@ -116,6 +128,16 @@ class TrioState extends ChangeNotifier {
       _sessions = decoded.map((item) => FocusSession.fromJson(item)).toList();
     }
 
+    // Load Track
+    final rawTrack = prefs.getString(_trackKey);
+    if (rawTrack != null) {
+      final decoded = jsonDecode(rawTrack) as Map<String, dynamic>;
+      _trackName = decoded['name'];
+      _trackType = decoded['type'];
+      _trackDay = decoded['day'] ?? 1;
+      _trackTotal = decoded['total'] ?? 14;
+    }
+
     _loaded = true;
     notifyListeners();
   }
@@ -138,6 +160,48 @@ class TrioState extends ChangeNotifier {
       return g.copyWith(sessionsTotal: total);
     }).toList();
     await _persistGoals();
+  }
+
+  Future<void> setTrack({
+    required String name,
+    required String type,
+    required int total,
+  }) async {
+    _trackName = name;
+    _trackType = type;
+    _trackTotal = total;
+    _trackDay = 1;
+    await _persistTrack();
+  }
+
+  Future<void> clearTrack() async {
+    _trackName = null;
+    _trackType = null;
+    _trackDay = 1;
+    _trackTotal = 14;
+    await _persistTrack();
+  }
+
+  Future<void> advanceTrack() async {
+    if (!hasTrack) return;
+    if (_trackDay < _trackTotal) {
+      _trackDay += 1;
+    }
+    await _persistTrack();
+  }
+
+  String trackDailyObjective() {
+    if (!hasTrack) return '';
+    switch (_trackType) {
+      case 'reading':
+        return 'Read 10 pages · Day $_trackDay/$_trackTotal';
+      case 'soft':
+        return 'Practice a soft skill · Day $_trackDay/$_trackTotal';
+      case 'hard':
+        return 'Complete a training module · Day $_trackDay/$_trackTotal';
+      default:
+        return 'Daily progress · Day $_trackDay/$_trackTotal';
+    }
   }
 
   Future<void> updateGoalTitle(String goalId, String newTitle) async {
@@ -190,4 +254,23 @@ class TrioState extends ChangeNotifier {
     await prefs.setString(_sessionsKey, jsonEncode(_sessions.map((s) => s.toJson()).toList()));
     notifyListeners();
   }
+
+  Future<void> _persistTrack() async {
+    final prefs = await SharedPreferences.getInstance();
+    final payload = _trackName == null
+        ? null
+        : jsonEncode({
+            'name': _trackName,
+            'type': _trackType,
+            'day': _trackDay,
+            'total': _trackTotal,
+          });
+    if (payload == null) {
+      await prefs.remove(_trackKey);
+    } else {
+      await prefs.setString(_trackKey, payload);
+    }
+    notifyListeners();
+  }
 }
+

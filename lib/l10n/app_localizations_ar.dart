@@ -148,4 +148,43 @@ class AppLocalizationsAr extends AppLocalizations {
   String focusCompleteBody(Object goal) {
     return 'عمل رائع! أنهيت \"$goal\". انتقل إلى الإنجاز التالي.';
   }
+
+  @override
+  String get trackBlockTitle => 'المسار النشط';
+
+  @override
+  String get trackNone => 'لا يوجد مسار نشط';
+
+  @override
+  String get trackActivate => 'تفعيل';
+
+  @override
+  String get trackDeactivate => 'إيقاف المسار';
+
+  @override
+  String get trackDaily => 'اليوم';
+
+  @override
+  String get trackAdvance => 'تم';
+
+  @override
+  String get trackUseAsGoal => 'استخدمه كهدف 1';
+
+  @override
+  String get trackDialogTitle => 'تفعيل مسار';
+
+  @override
+  String get trackNameHint => 'اسم الكتاب أو الدورة';
+
+  @override
+  String get trackTypeReading => 'قراءة';
+
+  @override
+  String get trackTypeSoft => 'مهارة ناعمة';
+
+  @override
+  String get trackTypeHard => 'مهارة تقنية';
+
+  @override
+  String get trackTotalHint => 'أيام';
 }

@@ -149,4 +149,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String focusCompleteBody(Object goal) {
     return 'Great job! You finished \"$goal\". Move to the next win.';
   }
+
+  @override
+  String get trackBlockTitle => 'Active path';
+
+  @override
+  String get trackNone => 'No active path';
+
+  @override
+  String get trackActivate => 'Activate';
+
+  @override
+  String get trackDeactivate => 'Stop path';
+
+  @override
+  String get trackDaily => 'Today';
+
+  @override
+  String get trackAdvance => 'Mark done';
+
+  @override
+  String get trackUseAsGoal => 'Use as Goal 1';
+
+  @override
+  String get trackDialogTitle => 'Activate a path';
+
+  @override
+  String get trackNameHint => 'Course or book name';
+
+  @override
+  String get trackTypeReading => 'Reading';
+
+  @override
+  String get trackTypeSoft => 'Soft skill';
+
+  @override
+  String get trackTypeHard => 'Hard skill';
+
+  @override
+  String get trackTotalHint => 'Days';
 }

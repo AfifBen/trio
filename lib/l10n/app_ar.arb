@@ -43,5 +43,19 @@
   "inProgress": "قيد التقدم",
   "sessionsCount": "{done}/{total} جلسات",
   "focusCompleteTitle": "اكتمل التركيز 🎉",
-  "focusCompleteBody": "عمل رائع! أنهيت \"{goal}\". انتقل إلى الإنجاز التالي."
+  "focusCompleteBody": "عمل رائع! أنهيت \"{goal}\". انتقل إلى الإنجاز التالي.",
+  "trackBlockTitle": "المسار النشط",
+  "trackNone": "لا يوجد مسار نشط",
+  "trackActivate": "تفعيل",
+  "trackDeactivate": "إيقاف المسار",
+  "trackDaily": "اليوم",
+  "trackAdvance": "تم",
+  "trackUseAsGoal": "استخدمه كهدف 1",
+  "trackDialogTitle": "تفعيل مسار",
+  "trackNameHint": "اسم الكتاب أو الدورة",
+  "trackTypeReading": "قراءة",
+  "trackTypeSoft": "مهارة ناعمة",
+  "trackTypeHard": "مهارة تقنية",
+  "trackTotalHint": "أيام"
 }
+

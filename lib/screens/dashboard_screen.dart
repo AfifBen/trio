@@ -71,31 +71,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Expanded(
                   child: goals.isEmpty
                       ? _EmptyGoals(onStart: () => _showGoalDialog(context))
-                      : ListView.separated(
-                          itemCount: goals.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 12),
-                          itemBuilder: (context, index) {
-                            final goal = goals[index];
-                            return Dismissible(
-                              key: ValueKey(goal.id),
-                              direction: DismissDirection.endToStart,
-                              confirmDismiss: (_) => _confirmDeleteGoal(context, goal),
-                              background: Container(
-                                alignment: Alignment.centerRight,
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFF6B6B),
-                                  borderRadius: BorderRadius.circular(16),
+                      : ListView(
+                          children: [
+                            _TrackBlock(
+                              hasTrack: trioState.hasTrack,
+                              title: trioState.trackName ?? '',
+                              daily: trioState.trackDailyObjective(),
+                              day: trioState.trackDay,
+                              total: trioState.trackTotal,
+                              onActivate: () => _showTrackDialog(context),
+                              onDeactivate: () => trioState.clearTrack(),
+                              onAdvance: () => trioState.advanceTrack(),
+                              onUseAsGoal: () => _useTrackAsGoal(context),
+                            ),
+                            const SizedBox(height: 12),
+                            ...goals.map((goal) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Dismissible(
+                                  key: ValueKey(goal.id),
+                                  direction: DismissDirection.endToStart,
+                                  confirmDismiss: (_) => _confirmDeleteGoal(context, goal),
+                                  background: Container(
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFF6B6B),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: const Icon(Icons.delete, color: Colors.white),
+                                  ),
+                                  child: GoalCard(
+                                    goal: goal,
+                                    onTap: () => _openFocus(context, goal),
+                                    onLongPress: () => _showSingleGoalEditDialog(context, goal),
+                                  ),
                                 ),
-                                child: const Icon(Icons.delete, color: Colors.white),
-                              ),
-                              child: GoalCard(
-                                goal: goal,
-                                onTap: () => _openFocus(context, goal),
-                                onLongPress: () => _showSingleGoalEditDialog(context, goal),
-                              ),
-                            );
-                          },
+                              );
+                            }).toList(),
+                          ],
                         ),
                 ),
                 const SizedBox(height: 8),
@@ -129,6 +143,118 @@ class _DashboardScreenState extends State<DashboardScreen> {
       MaterialPageRoute(
         builder: (_) => FocusScreen(goal: goal),
       ),
+    );
+  }
+
+  void _useTrackAsGoal(BuildContext context) {
+    final trioState = context.read<TrioState>();
+    if (!trioState.hasTrack) return;
+    if (trioState.goals.isEmpty) return;
+    final updated = trioState.goals.first.copyWith(
+      title: '${trioState.trackDailyObjective()} · ${trioState.trackName}',
+    );
+    trioState.updateGoalTitle(updated.id, updated.title);
+  }
+
+  Future<void> _showTrackDialog(BuildContext context) async {
+    final t = AppLocalizations.of(context)!;
+    final nameController = TextEditingController();
+    final totalController = TextEditingController(text: '14');
+    String type = 'reading';
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF131A24),
+          title: Text(t.trackDialogTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                style: const TextStyle(color: Color(0xFFE0E0E0)),
+                decoration: InputDecoration(
+                  hintText: t.trackNameHint,
+                  hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<String>(
+                value: type,
+                dropdownColor: const Color(0xFF131A24),
+                items: [
+                  DropdownMenuItem(value: 'reading', child: Text(t.trackTypeReading)),
+                  DropdownMenuItem(value: 'soft', child: Text(t.trackTypeSoft)),
+                  DropdownMenuItem(value: 'hard', child: Text(t.trackTypeHard)),
+                ],
+                onChanged: (val) => type = val ?? 'reading',
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: totalController,
+                keyboardType: TextInputType.number,
+                style: const TextStyle(color: Color(0xFFE0E0E0)),
+                decoration: InputDecoration(
+                  hintText: t.trackTotalHint,
+                  hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF1E2A38)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF00F0FF)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(t.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final name = nameController.text.trim();
+                final total = int.tryParse(totalController.text.trim()) ?? 14;
+                if (name.isNotEmpty) {
+                  context.read<TrioState>().setTrack(
+                        name: name,
+                        type: type,
+                        total: total,
+                      );
+                  Navigator.of(context).pop();
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF00F0FF),
+                foregroundColor: const Color(0xFF0A0E14),
+              ),
+              child: Text(t.save),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -374,6 +500,120 @@ class _EmptyGoals extends StatelessWidget {
             ),
             child: Text(t.defineGoals),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrackBlock extends StatelessWidget {
+  final bool hasTrack;
+  final String title;
+  final String daily;
+  final int day;
+  final int total;
+  final VoidCallback onActivate;
+  final VoidCallback onDeactivate;
+  final VoidCallback onAdvance;
+  final VoidCallback onUseAsGoal;
+
+  const _TrackBlock({
+    required this.hasTrack,
+    required this.title,
+    required this.daily,
+    required this.day,
+    required this.total,
+    required this.onActivate,
+    required this.onDeactivate,
+    required this.onAdvance,
+    required this.onUseAsGoal,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF131A24),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF1E2A38)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                t.trackBlockTitle,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFE0E0E0),
+                ),
+              ),
+              if (hasTrack)
+                TextButton(
+                  onPressed: onDeactivate,
+                  child: Text(t.trackDeactivate),
+                ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          if (!hasTrack) ...[
+            Text(
+              t.trackNone,
+              style: const TextStyle(color: Color(0xFF9AA4AF)),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton(
+              onPressed: onActivate,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFFE0E0E0),
+                side: const BorderSide(color: Color(0xFF1E2A38)),
+              ),
+              child: Text(t.trackActivate),
+            ),
+          ] else ...[
+            Text(
+              title,
+              style: const TextStyle(color: Color(0xFFE0E0E0)),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              '${t.trackDaily}: $daily',
+              style: const TextStyle(color: Color(0xFF9AA4AF)),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Day $day / $total',
+              style: const TextStyle(color: Color(0xFF00F0FF)),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: onAdvance,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF8A2BE2),
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Text(t.trackAdvance),
+                ),
+                const SizedBox(width: 8),
+                OutlinedButton(
+                  onPressed: onUseAsGoal,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFFE0E0E0),
+                    side: const BorderSide(color: Color(0xFF1E2A38)),
+                  ),
+                  child: Text(t.trackUseAsGoal),
+                ),
+              ],
+            ),
+          ]
         ],
       ),
     );

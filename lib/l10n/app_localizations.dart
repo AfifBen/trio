@@ -369,6 +369,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Great job! You finished \"{goal}\". Move to the next win.'**
   String focusCompleteBody(Object goal);
+
+  /// No description provided for @trackBlockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active path'**
+  String get trackBlockTitle;
+
+  /// No description provided for @trackNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No active path'**
+  String get trackNone;
+
+  /// No description provided for @trackActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get trackActivate;
+
+  /// No description provided for @trackDeactivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop path'**
+  String get trackDeactivate;
+
+  /// No description provided for @trackDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get trackDaily;
+
+  /// No description provided for @trackAdvance.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark done'**
+  String get trackAdvance;
+
+  /// No description provided for @trackUseAsGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Use as Goal 1'**
+  String get trackUseAsGoal;
+
+  /// No description provided for @trackDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate a path'**
+  String get trackDialogTitle;
+
+  /// No description provided for @trackNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Course or book name'**
+  String get trackNameHint;
+
+  /// No description provided for @trackTypeReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
+  String get trackTypeReading;
+
+  /// No description provided for @trackTypeSoft.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft skill'**
+  String get trackTypeSoft;
+
+  /// No description provided for @trackTypeHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard skill'**
+  String get trackTypeHard;
+
+  /// No description provided for @trackTotalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get trackTotalHint;
 }
 
 class _AppLocalizationsDelegate

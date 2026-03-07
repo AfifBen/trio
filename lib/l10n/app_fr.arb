@@ -43,5 +43,19 @@
   "inProgress": "En cours",
   "sessionsCount": "{done}/{total} sessions",
   "focusCompleteTitle": "Focus terminé 🎉",
-  "focusCompleteBody": "Bravo ! Tu as terminé \"{goal}\". Passe à la prochaine victoire."
+  "focusCompleteBody": "Bravo ! Tu as terminé \"{goal}\". Passe à la prochaine victoire.",
+  "trackBlockTitle": "Parcours actif",
+  "trackNone": "Aucun parcours actif",
+  "trackActivate": "Activer",
+  "trackDeactivate": "Arrêter",
+  "trackDaily": "Aujourd'hui",
+  "trackAdvance": "Valider",
+  "trackUseAsGoal": "Utiliser comme Objectif 1",
+  "trackDialogTitle": "Activer un parcours",
+  "trackNameHint": "Nom du livre ou formation",
+  "trackTypeReading": "Lecture",
+  "trackTypeSoft": "Soft skill",
+  "trackTypeHard": "Hard skill",
+  "trackTotalHint": "Jours"
 }
+
