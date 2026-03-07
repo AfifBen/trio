@@ -12,7 +12,7 @@ class NotificationService {
       iOS: iosSettings,
     );
 
-    await _plugin.initialize(settings);
+    await _plugin.initialize(initializationSettings: settings);
     await _requestPermissions();
   }
 
@@ -48,10 +48,10 @@ class NotificationService {
     );
 
     await _plugin.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title,
-      body,
-      details,
+      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title: title,
+      body: body,
+      details: details,
     );
   }
 }
