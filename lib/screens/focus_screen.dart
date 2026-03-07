@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/goal.dart';
 import '../services/notification_service.dart';
 import 'reward_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FocusScreen extends StatefulWidget {
   final Goal goal;
@@ -54,7 +55,11 @@ class _FocusScreenState extends State<FocusScreen> {
   }
 
   void _finishSession() {
-    NotificationService.showFocusComplete(goalTitle: widget.goal.title);
+    final t = AppLocalizations.of(context)!;
+    NotificationService.showFocusComplete(
+      title: t.focusCompleteTitle,
+      body: t.focusCompleteBody(widget.goal.title),
+    );
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => RewardScreen(goal: widget.goal),
@@ -70,12 +75,14 @@ class _FocusScreenState extends State<FocusScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E14),
       appBar: AppBar(
         backgroundColor: const Color(0xFF0A0E14),
         elevation: 0,
-        title: const Text('Focus'),
+        title: Text(t.focusTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
@@ -118,7 +125,7 @@ class _FocusScreenState extends State<FocusScreen> {
             ),
             const SizedBox(height: 32),
             Text(
-              _isRunning ? 'Mode Zen · Respire et avance' : 'Pause · Reviens quand tu es prêt',
+              _isRunning ? t.focusMode : t.pausedMode,
               style: const TextStyle(color: Color(0xFF9AA4AF)),
             ),
             const Spacer(),
@@ -135,7 +142,7 @@ class _FocusScreenState extends State<FocusScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: Text(_isRunning ? 'Pause' : 'Reprendre'),
+                    child: Text(_isRunning ? t.pause : t.resume),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -150,7 +157,7 @@ class _FocusScreenState extends State<FocusScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text('Terminer'),
+                    child: Text(t.finish),
                   ),
                 ),
               ],

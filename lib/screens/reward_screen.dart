@@ -2,6 +2,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/goal.dart';
 import '../models/trio_state.dart';
 
@@ -54,28 +55,26 @@ class _RewardScreenState extends State<RewardScreen> {
     );
   }
 
-  String _buildInsight() {
+  String _buildInsight(AppLocalizations t) {
     if (_transcript.trim().isEmpty) {
-      return 'Bravo ! Tu avances sur "${widget.goal.title}". '
-          'Prends une courte pause et repars.';
+      return t.focusCompleteBody(widget.goal.title);
     }
 
     final lower = _transcript.toLowerCase();
     if (lower.contains('bloqu') || lower.contains('difficile')) {
-      return 'Bien joué ! Tu as identifié un blocage sur "${widget.goal.title}". '
-          'Note-le et reviens avec un esprit frais.';
+      return t.focusCompleteBody(widget.goal.title);
     }
     if (lower.contains('fini') || lower.contains('termin')) {
-      return 'Excellent ! Objectif "${widget.goal.title}" presque bouclé. '
-          'Un dernier effort et tu le valides.';
+      return t.focusCompleteBody(widget.goal.title);
     }
 
-    return 'Super progression ! Tu avances sur "${widget.goal.title}". '
-        'Garde ce rythme.';
+    return t.focusCompleteBody(widget.goal.title);
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E14),
       body: SafeArea(
@@ -107,18 +106,18 @@ class _RewardScreenState extends State<RewardScreen> {
                     size: 80,
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Focus terminé !',
-                    style: TextStyle(
+                  Text(
+                    t.rewardTitle,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFE0E0E0),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '+120 Flow XP',
-                    style: TextStyle(
+                  Text(
+                    t.rewardXp,
+                    style: const TextStyle(
                       color: Color(0xFF00F0FF),
                       fontWeight: FontWeight.w600,
                     ),
@@ -134,14 +133,14 @@ class _RewardScreenState extends State<RewardScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Débrief vocal',
-                          style: TextStyle(color: Color(0xFFE0E0E0)),
+                        Text(
+                          t.debriefTitle,
+                          style: const TextStyle(color: Color(0xFFE0E0E0)),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          'Dis-moi en quelques mots comment ça s’est passé.',
-                          style: TextStyle(color: Color(0xFF9AA4AF)),
+                        Text(
+                          t.debriefSubtitle,
+                          style: const TextStyle(color: Color(0xFF9AA4AF)),
                         ),
                         const SizedBox(height: 12),
                         SizedBox(
@@ -149,7 +148,7 @@ class _RewardScreenState extends State<RewardScreen> {
                           child: OutlinedButton.icon(
                             onPressed: _toggleRecording,
                             icon: Icon(_listening ? Icons.stop : Icons.mic),
-                            label: Text(_listening ? 'Stop' : 'Enregistrer (10s)'),
+                            label: Text(_listening ? t.stop : t.record),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: const Color(0xFFE0E0E0),
                               side: const BorderSide(color: Color(0xFF1E2A38)),
@@ -182,13 +181,13 @@ class _RewardScreenState extends State<RewardScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Insight IA',
-                          style: TextStyle(color: Color(0xFFE0E0E0)),
+                        Text(
+                          t.insightTitle,
+                          style: const TextStyle(color: Color(0xFFE0E0E0)),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          _buildInsight(),
+                          _buildInsight(t),
                           style: const TextStyle(color: Color(0xFF9AA4AF)),
                         ),
                       ],
@@ -213,7 +212,7 @@ class _RewardScreenState extends State<RewardScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      child: const Text('Retour au dashboard'),
+                      child: Text(t.backToDashboard),
                     ),
                   ),
                 ],

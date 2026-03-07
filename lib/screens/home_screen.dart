@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dashboard_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -6,6 +7,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF0A0E14),
       body: SafeArea(
@@ -24,9 +27,9 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                '3 objectifs. 1 focus. Une journée gagnée.',
-                style: TextStyle(color: Color(0xFF9AA4AF), fontSize: 16),
+              Text(
+                t.homeTagline,
+                style: const TextStyle(color: Color(0xFF9AA4AF), fontSize: 16),
               ),
               const SizedBox(height: 24),
               Expanded(
@@ -65,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text('Commencer'),
+                  child: Text(t.start),
                 ),
               ),
               const SizedBox(height: 12),
@@ -85,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text('Accéder au tableau de bord'),
+                  child: Text(t.openDashboard),
                 ),
               ),
             ],

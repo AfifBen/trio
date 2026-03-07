@@ -5,6 +5,7 @@ import '../models/goal.dart';
 import '../widgets/goal_card.dart';
 import 'focus_screen.dart';
 import 'stats_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardScreen extends StatefulWidget {
   final bool autoOpenDialog;
@@ -34,12 +35,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       builder: (context, trioState, _) {
         final goals = trioState.goals;
 
+        final t = AppLocalizations.of(context)!;
+
         return Scaffold(
           backgroundColor: const Color(0xFF0A0E14),
           appBar: AppBar(
             backgroundColor: const Color(0xFF0A0E14),
             elevation: 0,
-            title: const Text('TRIO — Tes 3 Victoires'),
+            title: Text(t.dashboardTitle),
             actions: [
               IconButton(
                 onPressed: () {
@@ -60,9 +63,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Choisis un objectif et lance un Focus',
-                  style: TextStyle(color: Color(0xFF9AA4AF)),
+                Text(
+                  t.chooseGoal,
+                  style: const TextStyle(color: Color(0xFF9AA4AF)),
                 ),
                 const SizedBox(height: 16),
                 Expanded(
@@ -110,7 +113,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text('Démarrer un Focus'),
+                    child: Text(t.startFocus),
                   ),
                 ),
               ],
@@ -133,12 +136,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final titleControllers = List.generate(3, (_) => TextEditingController());
     final totalControllers = List.generate(3, (_) => TextEditingController(text: '4'));
 
+    final t = AppLocalizations.of(context)!;
+
     await showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor: const Color(0xFF131A24),
-          title: const Text('Tes 3 objectifs du jour'),
+          title: Text(t.setGoalsTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: List.generate(3, (index) {
@@ -152,7 +157,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         controller: titleControllers[index],
                         style: const TextStyle(color: Color(0xFFE0E0E0)),
                         decoration: InputDecoration(
-                          hintText: 'Objectif ${index + 1}',
+                          hintText: t.goalHint(index + 1),
                           hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -172,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         keyboardType: TextInputType.number,
                         style: const TextStyle(color: Color(0xFFE0E0E0)),
                         decoration: InputDecoration(
-                          hintText: 'Cycles',
+                          hintText: t.cyclesHint,
                           hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -193,7 +198,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Annuler'),
+              child: Text(t.cancel),
             ),
             ElevatedButton(
               onPressed: () {
@@ -213,7 +218,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 backgroundColor: const Color(0xFF00F0FF),
                 foregroundColor: const Color(0xFF0A0E14),
               ),
-              child: const Text('Sauvegarder'),
+              child: Text(t.save),
             ),
           ],
         );
@@ -225,12 +230,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final titleController = TextEditingController(text: goal.title);
     final totalController = TextEditingController(text: goal.sessionsTotal.toString());
 
+    final t = AppLocalizations.of(context)!;
+
     await showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(
           backgroundColor: const Color(0xFF131A24),
-          title: const Text('Modifier cet objectif'),
+          title: Text(t.editGoalTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -238,7 +245,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 controller: titleController,
                 style: const TextStyle(color: Color(0xFFE0E0E0)),
                 decoration: InputDecoration(
-                  hintText: 'Nouvel objectif',
+                  hintText: t.newGoalHint,
                   hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -256,7 +263,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 keyboardType: TextInputType.number,
                 style: const TextStyle(color: Color(0xFFE0E0E0)),
                 decoration: InputDecoration(
-                  hintText: 'Cycles',
+                  hintText: t.cyclesHint,
                   hintStyle: const TextStyle(color: Color(0xFF9AA4AF)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -273,14 +280,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Annuler'),
+              child: Text(t.cancel),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _confirmDeleteGoal(context, goal);
               },
-              child: const Text('Supprimer', style: TextStyle(color: Color(0xFFFF6B6B))),
+              child: Text(t.delete, style: const TextStyle(color: Color(0xFFFF6B6B))),
             ),
             ElevatedButton(
               onPressed: () {
@@ -296,7 +303,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 backgroundColor: const Color(0xFF00F0FF),
                 foregroundColor: const Color(0xFF0A0E14),
               ),
-              child: const Text('Sauvegarder'),
+              child: Text(t.save),
             ),
           ],
         );
@@ -305,19 +312,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<bool> _confirmDeleteGoal(BuildContext context, Goal goal) async {
+    final t = AppLocalizations.of(context)!;
     final result = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF131A24),
-        title: const Text('Supprimer cet objectif ?'),
-        content: const Text(
-          'Cette action efface l\'objectif et remet son compteur à zéro.',
-          style: TextStyle(color: Color(0xFF9AA4AF)),
+        title: Text(t.deleteGoalConfirmTitle),
+        content: Text(
+          t.deleteGoalConfirmBody,
+          style: const TextStyle(color: Color(0xFF9AA4AF)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Annuler'),
+            child: Text(t.cancel),
           ),
           ElevatedButton(
             onPressed: () {
@@ -328,7 +336,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               backgroundColor: const Color(0xFFFF6B6B),
               foregroundColor: Colors.white,
             ),
-            child: const Text('Supprimer'),
+            child: Text(t.delete),
           ),
         ],
       ),
@@ -345,15 +353,17 @@ class _EmptyGoals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(Icons.star_border, color: Color(0xFF8A2BE2), size: 48),
           const SizedBox(height: 12),
-          const Text(
-            'Définis tes 3 objectifs pour commencer',
-            style: TextStyle(color: Color(0xFFE0E0E0)),
+          Text(
+            t.emptyGoals,
+            style: const TextStyle(color: Color(0xFFE0E0E0)),
           ),
           const SizedBox(height: 12),
           ElevatedButton(
@@ -362,7 +372,7 @@ class _EmptyGoals extends StatelessWidget {
               backgroundColor: const Color(0xFF8A2BE2),
               foregroundColor: Colors.white,
             ),
-            child: const Text('Définir mes objectifs'),
+            child: Text(t.defineGoals),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/goal.dart';
 
 class GoalCard extends StatelessWidget {
@@ -13,6 +14,8 @@ class GoalCard extends StatelessWidget {
     final progress = goal.sessionsTotal == 0
         ? 0.0
         : goal.sessionsDone / goal.sessionsTotal;
+
+    final t = AppLocalizations.of(context)!;
 
     return InkWell(
       onTap: onTap,
@@ -30,7 +33,7 @@ class GoalCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                goal.title.isEmpty ? 'Objectif vide' : goal.title,
+                goal.title.isEmpty ? t.emptyGoals : goal.title,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -56,11 +59,11 @@ class GoalCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${goal.sessionsDone}/${goal.sessionsTotal} sessions',
+                    t.sessionsCount(goal.sessionsDone, goal.sessionsTotal),
                     style: const TextStyle(color: Color(0xFF9AA4AF)),
                   ),
                   Text(
-                    goal.completed ? 'Terminé' : 'En cours',
+                    goal.completed ? t.completed : t.inProgress,
                     style: TextStyle(
                       color: goal.completed
                           ? const Color(0xFFFFD700)

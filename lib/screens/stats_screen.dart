@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/trio_state.dart';
 
 class StatsScreen extends StatelessWidget {
@@ -13,12 +14,14 @@ class StatsScreen extends StatelessWidget {
         final sessions = state.sessions.reversed.toList();
         final weekly = state.last7DaysSessions();
 
+        final t = AppLocalizations.of(context)!;
+
         return Scaffold(
           backgroundColor: const Color(0xFF0A0E14),
           appBar: AppBar(
             backgroundColor: const Color(0xFF0A0E14),
             elevation: 0,
-            title: const Text('Statistiques & Historique'),
+            title: Text(t.statsTitle),
           ),
           body: CustomScrollView(
             slivers: [
@@ -29,21 +32,21 @@ class StatsScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       _buildStatCard(
-                        'Sessions',
+                        t.sessionsLabel,
                         '${state.sessions.length}',
                         Icons.timer,
                         const Color(0xFF00F0FF),
                       ),
                       const SizedBox(width: 12),
                       _buildStatCard(
-                        'Minutes',
+                        t.minutesLabel,
                         '${state.totalMinutes}',
                         Icons.bolt,
                         const Color(0xFF8A2BE2),
                       ),
                       const SizedBox(width: 12),
                       _buildStatCard(
-                        'Streak',
+                        t.streakLabel,
                         '${state.streakDays}j',
                         Icons.local_fire_department,
                         const Color(0xFFFFD700),
@@ -60,12 +63,12 @@ class StatsScreen extends StatelessWidget {
                 ),
               ),
 
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
-                    'Dernières Sessions',
-                    style: TextStyle(
+                    t.lastSessions,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFE0E0E0),
@@ -76,11 +79,11 @@ class StatsScreen extends StatelessWidget {
 
               // Liste de l'historique
               sessions.isEmpty
-                  ? const SliverFillRemaining(
+                  ? SliverFillRemaining(
                       child: Center(
                         child: Text(
-                          'Aucune session terminée pour le moment.',
-                          style: TextStyle(color: Color(0xFF9AA4AF)),
+                          t.noSessions,
+                          style: const TextStyle(color: Color(0xFF9AA4AF)),
                         ),
                       ),
                     )
@@ -185,6 +188,7 @@ class _WeeklyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     final maxVal = weekly.isEmpty ? 1 : weekly.reduce((a, b) => a > b ? a : b);
 
     return Container(
@@ -197,9 +201,9 @@ class _WeeklyChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Activité 7 derniers jours',
-            style: TextStyle(
+          Text(
+            t.weeklyActivity,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xFFE0E0E0),

@@ -28,11 +28,14 @@ class NotificationService {
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
-  static Future<void> showFocusComplete({required String goalTitle}) async {
+  static Future<void> showFocusComplete({
+    required String title,
+    required String body,
+  }) async {
     const androidDetails = AndroidNotificationDetails(
       'trio_focus',
-      'Focus terminé',
-      channelDescription: 'Notifications de fin de focus',
+      'Focus complete',
+      channelDescription: 'Focus completion notifications',
       importance: Importance.high,
       priority: Priority.high,
     );
@@ -46,9 +49,10 @@ class NotificationService {
 
     await _plugin.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      'Focus terminé 🎉',
-      'Bravo ! Tu as terminé "$goalTitle". Passe à la prochaine victoire.',
+      title,
+      body,
       details,
     );
   }
 }
+
