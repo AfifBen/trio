@@ -445,17 +445,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 }).where((row) => (row['title'] as String).isNotEmpty).toList();
 
                 if (rows.isEmpty) return;
-                if (rows.any((row) => (row['categoryItem'] as String).isEmpty)) {
-                  return;
-                }
 
                 final goals = List.generate(rows.length, (index) {
                   final row = rows[index];
+                  final title = row['title'] as String;
+                  final categoryItemRaw = row['categoryItem'] as String;
                   return Goal(
                     id: 'goal_${index + 1}',
-                    title: row['title'] as String,
+                    title: title,
                     categoryType: row['categoryType'] as String,
-                    categoryItem: row['categoryItem'] as String,
+                    categoryItem: categoryItemRaw.isEmpty ? title : categoryItemRaw,
                     description: row['description'] as String,
                     sessionsDone: 0,
                     sessionsTotal: row['total'] as int,
@@ -637,8 +636,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 final newCategoryItemRaw = categoryController.text.trim();
                 if (newTitle.isEmpty) return;
 
-                final newCategoryItem =
-                    newCategoryItemRaw.isEmpty ? goal.categoryItem : newCategoryItemRaw;
+                final newCategoryItem = newCategoryItemRaw.isEmpty
+                    ? (goal.categoryItem.isEmpty ? newTitle : goal.categoryItem)
+                    : newCategoryItemRaw;
 
                 final trio = context.read<TrioState>();
                 await trio.ensureCategoryItem(categoryType, newCategoryItem);
